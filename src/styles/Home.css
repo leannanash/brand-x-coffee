@@ -1,0 +1,29 @@
+#home {
+    position: relative;
+    background-image: url('path-to-your-coffee-image.jpg');
+    width: 100%;
+    height: 100vh;
+    background-size: cover;           /* Fill the section, cropping if needed */
+    background-position: center 30%; /* Focus on the important part of the image */
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    color: white;                    /* If overlay is dark, white text pops */
+  }
+  
+  #home::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);  /* Dark overlay to improve text readability */
+    z-index: 1;
+  }
+  
+  #home .container {
+    position: relative;
+    z-index: 2; /* Place container above the overlay */
+  }
+  

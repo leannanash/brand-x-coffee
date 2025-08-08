@@ -1,0 +1,14 @@
+/* Header.css */
+.navbar-brand .logo {
+    height: 40px;
+    width: 40px;
+  }
+  .navbar-brand .brand {
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 0;
+  }
+  .nav-item.d-flex.gap-3 i {
+    cursor: pointer;
+  }
+  
