@@ -1,15 +1,15 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 import HomeSection from "../components/HomeSection";
 import FeaturedSection from "../components/FeaturedSection";
 import BannerSection from "../components/BannerSection";
 import Menu from "../components/Menu";   // <-- import Menu
 import Footer from "../components/Footer";
+import Header from "../components/Header";
 
 export default function Home() {
   return (
     <>
-      <Navbar />
+      <Header />
       <main style={{ paddingTop: "80px" }}>
         <HomeSection />
         <FeaturedSection />
