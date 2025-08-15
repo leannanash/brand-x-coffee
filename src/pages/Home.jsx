@@ -3,13 +3,11 @@ import HomeSection from "../components/HomeSection";
 import FeaturedSection from "../components/FeaturedSection";
 import BannerSection from "../components/BannerSection";
 import Menu from "../components/Menu";   // <-- import Menu
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+
 
 export default function Home() {
   return (
     <>
-      <Header />
       <main style={{ paddingTop: "80px" }}>
         <HomeSection />
         <FeaturedSection />
@@ -22,7 +20,6 @@ export default function Home() {
             backgroundImage="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1350&q=80"
         />
       </main>
-      <Footer />
     </>
   );
 }

@@ -1,29 +1,100 @@
 #home {
     position: relative;
-    background-image: url('path-to-your-coffee-image.jpg');
+    background-image: url('../assets/imgs/coffee-hero.jpg'); /* updated to match project */
     width: 100%;
     height: 100vh;
-    background-size: cover;           /* Fill the section, cropping if needed */
-    background-position: center 30%; /* Focus on the important part of the image */
+    background-size: cover;
+    background-position: center 35%; /* slightly higher focus for coffee cups */
     background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    color: white;                    /* If overlay is dark, white text pops */
+    padding: 0 3rem;
+    color: #fff;
+    font-family: 'Playfair Display', serif; /* premium coffee typography */
+    overflow: hidden;
   }
   
+  /* Warm coffee overlay for readability */
   #home::before {
     content: "";
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4);  /* Dark overlay to improve text readability */
+    inset: 0;
+    background: linear-gradient(
+      rgba(30, 20, 10, 0.6),
+      rgba(15, 10, 5, 0.6)
+    );
     z-index: 1;
   }
   
+  /* Keep text above overlay */
   #home .container {
     position: relative;
-    z-index: 2; /* Place container above the overlay */
+    z-index: 2;
+    max-width: 650px;
+  }
+  
+  /* Heading styles */
+  #home h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.85);
+    animation: fadeInUp 0.8s ease forwards;
+  }
+  
+  #home p {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    color: #f3e9dc; /* latte tone */
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.75);
+    animation: fadeInUp 1s ease forwards;
+  }
+  
+  /* CTA button */
+  #home .btn-coffee {
+    background-color: #b5895a;
+    border: none;
+    padding: 14px 34px;
+    font-weight: 600;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    animation: fadeInUp 1.2s ease forwards;
+  }
+  
+  #home .btn-coffee:hover {
+    background-color: #8c6239;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+  }
+  
+  /* Animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    #home {
+      padding: 4rem 2rem;
+      height: auto;
+      text-align: center;
+      align-items: center;
+    }
+    
+    #home .container {
+      max-width: 100%;
+    }
   }
   

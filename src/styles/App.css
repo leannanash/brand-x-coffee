@@ -1,39 +1,40 @@
 /* General App Styles */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #fff;
-  color: #333;
+  font-family: 'Poppins', sans-serif;
+  background: #f5f0eb; /* light coffee cream */
+  color: #4b3621; /* dark coffee brown */
 }
 
 .container {
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
 }
 
 /* ================= HOME SECTION ================= */
 #home {
   text-align: center;
-  padding: 50px 0;
+  padding: 35px 0;
 }
 
 #home span {
   display: block;
   font-size: 14px;
-  color: #ff4c4c;
+  color: #b58969; /* caramel accent */
   margin-bottom: 5px;
 }
 
 #home h1 {
   font-size: 36px;
   margin-bottom: 20px;
+  color: #4b3621; /* main text dark brown */
 }
 
 #home button {
-  background-color: #ff4c4c;
+  background-color: #8b5e3c; /* coffee brown */
   border: none;
   padding: 10px 20px;
-  color: white;
+  color: #fff7f0; /* cream */
   cursor: pointer;
   border-radius: 4px;
   font-size: 16px;
@@ -42,14 +43,14 @@ body {
 
 #home button:hover,
 #home button:focus {
-  background-color: #e04040;
+  background-color: #734c2e;
   outline: none;
 }
 
 /* ================= BANNER SECTION ================= */
 #banner {
   background: url('/path/to/banner-image.jpg') no-repeat center/cover;
-  color: white;
+  color: #fff7f0;
   text-align: center;
   padding: 60px 20px;
 }
@@ -57,18 +58,20 @@ body {
 #banner h1 {
   font-size: 40px;
   margin-bottom: 10px;
+  color: #fff7f0;
 }
 
 #banner p {
   font-size: 18px;
   margin-bottom: 20px;
+  color: #ffe8d6;
 }
 
 #banner button {
-  background-color: #ff4c4c;
+  background-color: #8b5e3c;
   border: none;
   padding: 10px 20px;
-  color: white;
+  color: #fff7f0;
   cursor: pointer;
   border-radius: 4px;
   font-size: 16px;
@@ -77,14 +80,14 @@ body {
 
 #banner button:hover,
 #banner button:focus {
-  background-color: #e04040;
+  background-color: #734c2e;
   outline: none;
 }
 
 /* ================= FOOTER ================= */
 footer {
-  background: #111;
-  color: white;
+  background: #4b3621; /* dark coffee */
+  color: #fff7f0;
   padding: 40px 20px 20px;
   text-align: center;
 }
@@ -99,24 +102,25 @@ footer .col {
 
 footer h4 {
   margin-bottom: 10px;
+  color: #ffe8d6;
 }
 
 footer a {
-  color: #bbb;
+  color: #d4a373; /* caramel links */
   text-decoration: none;
 }
 
 footer a:hover,
 footer a:focus {
-  color: white;
+  color: #fff7f0;
   outline: none;
 }
 
 footer .copyright {
-  border-top: 1px solid #333;
+  border-top: 1px solid #3a2717;
   padding-top: 15px;
   font-size: 14px;
-  color: #777;
+  color: #cbb299;
 }
 
 /* Logo styling */
@@ -137,17 +141,17 @@ footer .copyright {
 
 /* Product card styling */
 .product {
-  border: 1px solid #ddd;
+  border: 1px solid #d4a373;
   padding: 15px;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: #fff7f0;
   transition: box-shadow 0.3s ease;
   cursor: pointer;
 }
 
 .product:hover,
 .product:focus {
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 15px rgba(75,54,33,0.25);
   outline: none;
 }
 
@@ -162,17 +166,18 @@ footer .copyright {
 .star i {
   margin: 0 3px;
   font-size: 18px;
-  color: #FFD700; /* gold */
+  color: #d4a373; /* caramel stars */
 }
 
 /* Product text styling */
 .p-name {
   font-weight: 600;
   margin: 10px 0 5px;
+  color: #4b3621;
 }
 
 .p-price {
-  color: #FF6B81;
+  color: #8b5e3c;
   font-weight: 700;
   margin-bottom: 15px;
 }
@@ -183,17 +188,17 @@ footer .copyright {
   font-weight: 600;
   border-radius: 25px;
   transition: background-color 0.3s ease;
-  border: 2px solid #FF6B81;
+  border: 2px solid #8b5e3c;
   background-color: transparent;
-  color: #FF6B81;
+  color: #8b5e3c;
   cursor: pointer;
 }
 
 .buy-btn:hover,
 .buy-btn:focus {
-  background-color: #FF6B81;
-  color: #fff;
-  border-color: #FF6B81;
+  background-color: #8b5e3c;
+  color: #fff7f0;
+  border-color: #734c2e;
   outline: none;
 }
 
@@ -201,19 +206,19 @@ footer .copyright {
 section {
   text-align: center;
   padding: 60px 20px;
-  background-color: #fff7f7;
+  background-color: #fff7f0;
 }
 
 section h2 {
   font-size: 2.5rem;
-  color: #ff4c4c;
+  color: #8b5e3c;
   margin-bottom: 15px;
   font-weight: 700;
 }
 
 section p {
   font-size: 1.2rem;
-  color: #555;
+  color: #4b3621;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -222,7 +227,7 @@ section p {
 .banner-section {
   background-size: cover;
   background-position: center;
-  color: #fff;
+  color: #fff7f0;
   padding: 100px 20px;
   text-align: center;
 }
@@ -239,10 +244,10 @@ section p {
 }
 
 .banner-section button {
-  background-color: #ff4c4c;
+  background-color: #8b5e3c;
   border: none;
   padding: 12px 25px;
-  color: white;
+  color: #fff7f0;
   cursor: pointer;
   border-radius: 5px;
   font-size: 1rem;
@@ -251,25 +256,6 @@ section p {
 
 .banner-section button:hover,
 .banner-section button:focus {
-  background-color: #e04040;
+  background-color: #734c2e;
   outline: none;
-}
-
-/* Responsive logo and payment image sizes */
-@media (max-width: 768px) {
-  .logo {
-    max-width: 40px;
-  }
-  .payment-logo {
-    max-width: 50px;
-  }
-}
-
-@media (max-width: 480px) {
-  .logo {
-    max-width: 35px;
-  }
-  .payment-logo {
-    max-width: 40px;
-  }
 }

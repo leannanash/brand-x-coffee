@@ -1,0 +1,12 @@
+/* Reset default margin/padding */
+* {
+  margin: 0;
+  padding:0;
+  box-sizing: border-box;
+}
+
+/* Body and html full width */
+html, body {
+  width: 100%;
+  overflow-x: hidden; /* prevent horizontal scroll */
+}
