@@ -8,7 +8,7 @@ export default function HomeSection() {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        padding: '80px 0',
+        padding: '80 px 0',
         position: 'relative',
       }}
     >

@@ -1,5 +1,5 @@
 import React from "react";
-import MenuItem from "./MenuItem";
+import MenuItem from "./reusable components/MenuItem";
 
 import img4 from "../assets/products/4.jpg"; 
 import img5 from "../assets/products/5.jpg"; 

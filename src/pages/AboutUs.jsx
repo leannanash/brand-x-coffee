@@ -1,5 +1,5 @@
 import React from 'react';
-import ScrollableBanner from '../components/ScrollableBanner';
+import ScrollableBanner from '../components/reusable components/ScrollableBanner';
 import bannerImage from '../assets/imgs/banner2.jpg';
 
 export default function AboutUs() {

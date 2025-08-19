@@ -1,14 +1,14 @@
 import React from "react";
 import HomeSection from "../components/HomeSection";
 import FeaturedSection from "../components/FeaturedSection";
-import BannerSection from "../components/BannerSection";
+import BannerSection from "../components/reusable components/BannerSection";
 import Menu from "../components/Menu";   // <-- import Menu
 
 
 export default function Home() {
   return (
     <>
-      <main style={{ paddingTop: "80px" }}>
+      <main style={{ paddingTop: "65px" }}>
         <HomeSection />
         <FeaturedSection />
         <Menu />                

@@ -3,7 +3,7 @@ import img11 from "../assets/products/11.jpg";
 import img10 from "../assets/products/10.jpg";
 import img12 from "../assets/products/12.jpg";
 import img5 from "../assets/products/5.jpg";
-import ProductCard from "./ProductCard";
+import ProductCard from "./reusable components/ProductCard";
 
 const BEST_SELLERS = [
   { image: img11, title: "Matcha Latte", price: 150, rating: 5 },
