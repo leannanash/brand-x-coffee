@@ -48,6 +48,7 @@ body {
 }
 
 /* ================= BANNER SECTION ================= */
+
 #banner {
   background: url('/path/to/banner-image.jpg') no-repeat center/cover;
   color: #fff7f0;
@@ -254,8 +255,10 @@ section p {
   transition: background-color 0.3s ease;
 }
 
+
 .banner-section button:hover,
 .banner-section button:focus {
   background-color: #734c2e;
   outline: none;
 }
+
