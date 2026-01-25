@@ -107,6 +107,66 @@
     padding-bottom: 4px;
     margin-bottom: 1rem;
   }
+
+  /* =========================
+   MENU PREVIEW (HOMEPAGE)
+   ========================= */
+
+.menu-preview {
+  background: linear-gradient(180deg, #faf7f2 0%, #ffffff 100%);
+  padding: 80px 0;
+}
+
+/* Header styling */
+.menu-preview .menu-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.7rem;
+  color: #c29a5b;
+  font-weight: 600;
+}
+
+.menu-preview .menu-title {
+  font-size: 2.3rem;
+  font-weight: 800;
+  color: #2c2c2c;
+}
+
+.menu-preview .menu-subtitle {
+  color: #6f6f6f;
+  max-width: 520px;
+  margin: 0.5rem auto 0;
+}
+
+/* Softer cards for preview */
+.menu-preview .menu-card {
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.menu-preview .menu-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Image tweak */
+.menu-preview .menu-card img {
+  height: 200px;
+}
+
+/* CTA button */
+.menu-preview .btn-outline-dark {
+  border-width: 2px;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.menu-preview .btn-outline-dark:hover {
+  background-color: #2c2c2c;
+  color: #fff;
+}
+
   
   /* Responsive Adjustments */
   @media (max-width: 992px) {

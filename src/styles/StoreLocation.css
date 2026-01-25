@@ -1,67 +1,120 @@
-/* Wrapper with coffee vibes */
-.coffee-map-wrapper {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 24px;
-    background: #f8f4f0; /* ☕ latte beige */
-    border-radius: 16px;
-    box-shadow: 0 6px 18px rgba(92, 64, 51, 0.2); /* mocha shadow */
-    border: 1px solid #e0d6cf;
-    text-align: center;
-  }
-  
-  /* Title & subtitle */
-  .coffee-map-title {
-    font-size: 1.9rem;
-    margin-bottom: 8px;
-    color: #5c4033; /* dark coffee brown */
-    font-family: 'Merriweather', serif;
-  }
-  
-  .coffee-map-subtitle {
-    color: #7b5e57; /* cappuccino brown */
-    margin-bottom: 18px;
-    font-style: italic;
-  }
-  
-  /* Map styling */
-  .leaflet-container {
-    height: 480px;
-    width: 100%;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 2px solid #d2b48c; /* latte border */
-    z-index: 0 !important; /* ✅ keeps header on top */
-  }
-  
-  /* Popup styling */
-  .popup-content {
-    text-align: center;
-    padding: 5px 10px;
-  }
-  
-  .popup-content h4 {
-    margin: 4px 0 2px;
-    font-size: 1rem;
-    color: #5c4033;
-    font-weight: 600;
-  }
-  
-  .popup-content p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #7b5e57;
-  }
-  
-  .popup-icon {
-    width: 28px;
-    margin-bottom: 6px;
-  }
-  
-  .coffee-map-hours {
-    color: #5c4033; /* dark mocha */
-    font-weight: 500;
-    margin-bottom: 20px;
-    font-size: 1rem;
-  }
-  
+/* =========================
+   LOCATION PREVIEW (HOME)
+   ========================= */
+
+.location-preview {
+  position: relative;
+  padding: 100px 0;
+  background: linear-gradient(135deg, #2c2c2c 0%, #1e140a 100%);
+  font-family: 'Playfair Display', serif;
+  overflow: hidden;
+}
+
+.location-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 10, 5, 0.55); /* similar dark warm overlay */
+  z-index: 1;
+}
+
+.location-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.85rem;
+  color: #d4a373; /* coffee gold accent */
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.location-title {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #fff;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+}
+
+.location-address,
+.location-hours {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  color: #f3e9dc;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+}
+
+.location-address i,
+.location-hours i {
+  color: #ffd27f;
+  font-size: 1.2rem;
+  margin-right: 8px;
+}
+
+.location-desc {
+  color: #f3e9dc;
+  max-width: 420px;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+}
+
+.btn-primary {
+  background-color: #b5895a; /* warm coffee brown */
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #8c6239; /* richer roast color */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.55);
+}
+
+.location-map-preview {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.location-map-preview:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.65);
+}
+
+.location-map-preview iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+}
+
+/* ================= Animations (fadeIn similar to HomeSection) ================= */
+.animate-fadeInUp {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease forwards;
+}
+
+.animate-fadeInDown {
+  opacity: 0;
+  transform: translateY(-15px);
+  animation: fadeInDown 0.8s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
+}

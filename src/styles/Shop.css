@@ -1,0 +1,84 @@
+/* =========================
+   SHOP PAGE
+   ========================= */
+
+.shop-page {
+  font-family: 'Playfair Display', serif;
+  background-color: #fef9f3;
+  color: #2c2c2c;
+}
+
+.shop-hero {
+  position: relative;
+  background-image: url('../assets/imgs/shop-hero.jpg');
+  background-size: cover;
+  background-position: center 50%;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 2rem;
+  margin-bottom: 2rem;
+}
+
+.shop-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 20, 10, 0.5);
+  z-index: 1;
+}
+
+.shop-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: #ffd27f;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+  margin-bottom: 0.5rem;
+}
+
+.shop-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: #fff1da;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
+.btn-outline-warning {
+  border-color: #b5895a;
+  color: #2c2c2c;
+  font-weight: 600;
+  border-radius: 25px;
+  padding: 6px 18px;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-warning:hover,
+.btn-outline-warning.active {
+  background-color: #b5895a;
+  color: #fff;
+  border-color: #b5895a;
+}
+
+/* Animations */
+.animate-fadeInUp {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .shop-hero {
+    height: 40vh;
+  }
+  .shop-title {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+  }
+  .shop-subtitle {
+    font-size: clamp(0.95rem, 3vw, 1.1rem);
+  }
+}
