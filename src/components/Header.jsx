@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/imgs/logo.jpg";
 
-export default function Header() {
+export default function Header({ cartCount = 0, onBasketToggle }) {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -12,10 +12,6 @@ export default function Header() {
     { label: "About Us", path: "/about" },
     { label: "Contact", path: "/contact" },
   ];
-
-  const toggleMenu = () => {
-    setMenuOpen((prev) => !prev);
-  };
 
   return (
     <nav className="navbar navbar-expand-lg">
@@ -31,32 +27,39 @@ export default function Header() {
           className="navbar-toggler"
           type="button"
           aria-label="Toggle navigation menu"
-          onClick={toggleMenu}
+          onClick={() => setMenuOpen(!menuOpen)}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Centered Links + Right Icons */}
-        <div
-          className={`navbar-nav ${menuOpen ? "show" : ""}`}
-          id="navbarContent"
-        >
+        <div className={`navbar-nav ${menuOpen ? "show" : ""}`}>
           {navLinks.map(({ label, path }) => (
             <Link
               key={label}
               to={path}
               className={`nav-link ${location.pathname === path ? "active" : ""}`}
-              onClick={() => setMenuOpen(false)} // close menu on click
+              onClick={() => setMenuOpen(false)}
             >
               {label}
             </Link>
           ))}
 
-          {/* Icons right (hidden on mobile via CSS) */}
+          {/* Right icons */}
           <div className="navbar-icons ms-auto">
-            <button className="icon-btn" aria-label="View shopping cart">
+            {/* View Basket */}
+            <button
+              className="icon-btn position-relative"
+              aria-label="View basket"
+              onClick={onBasketToggle}
+            >
               <i className="fa-solid fa-bag-shopping"></i>
+
+              {cartCount > 0 && (
+                <span className="cart-badge">{cartCount}</span>
+              )}
             </button>
+
+            {/* User */}
             <button className="icon-btn" aria-label="User profile">
               <i className="fa-solid fa-user"></i>
             </button>

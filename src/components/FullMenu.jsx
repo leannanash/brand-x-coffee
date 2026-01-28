@@ -51,36 +51,40 @@ const menuData = {
   ],
 };
 
-// Split featured and others
 function splitFeatured(items, featuredCount) {
-  const featured = items.slice(0, featuredCount);
-  const others = items.slice(featuredCount);
-  return { featured, others };
+  return {
+    featured: items.slice(0, featuredCount),
+    others: items.slice(featuredCount),
+  };
 }
 
-export default function Menu() {
-  const { featured: featuredIcedCoffee, others: otherIcedCoffee } = splitFeatured(menuData.icedCoffee, 3);
-  const { featured: featuredNonCoffee, others: otherNonCoffee } = splitFeatured(menuData.nonCoffeeIced, 2);
-  const { featured: featuredHotCoffee, others: otherHotCoffee } = splitFeatured(menuData.hotCoffee, 2);
-  const { featured: featuredRiceMeals, others: otherRiceMeals } = splitFeatured(menuData.riceMeals, 2);
-  const { featured: featuredBurgers, others: otherBurgers } = splitFeatured(menuData.burgers, 1);
-  const { featured: featuredDesserts, others: otherDesserts } = splitFeatured(menuData.desserts, 3);
+export default function Menu({ activeCategory, onAddToBasket }) {
+  const { featured: featuredIcedCoffee, others: otherIcedCoffee } =
+    splitFeatured(menuData.icedCoffee, 3);
+  const { featured: featuredNonCoffee, others: otherNonCoffee } =
+    splitFeatured(menuData.nonCoffeeIced, 2);
+  const { featured: featuredHotCoffee, others: otherHotCoffee } =
+    splitFeatured(menuData.hotCoffee, 2);
+  const { featured: featuredRiceMeals, others: otherRiceMeals } =
+    splitFeatured(menuData.riceMeals, 2);
+  const { featured: featuredBurgers, others: otherBurgers } =
+    splitFeatured(menuData.burgers, 1);
+  const { featured: featuredDesserts, others: otherDesserts } =
+    splitFeatured(menuData.desserts, 3);
 
   const renderMenuSection = (title, featuredItems, otherItems) => (
     <div className="menu-section my-5">
       <div className="container">
         <h4 className="section-title mb-4">{title}</h4>
+
         <div className="row g-4">
           {featuredItems.map((item, idx) => (
             <div key={idx} className="col-sm-6 col-md-4 col-lg-3">
               <MenuItem
-                image={item.image}
-                title={item.title}
+                {...item}
                 price={item.price || (item.price12oz ? `${item.price12oz} / ${item.price16oz}` : "")}
-                priceSingle={item.priceSingle}
-                priceDouble={item.priceDouble}
-                rating={item.rating}
                 note={item.note || item.description}
+                onAddToBasket={onAddToBasket}
               />
             </div>
           ))}
@@ -93,13 +97,10 @@ export default function Menu() {
               {otherItems.map((item, idx) => (
                 <div key={idx} className="col-sm-6 col-md-4 col-lg-3">
                   <MenuItem
-                    image={item.image}
-                    title={item.title}
+                    {...item}
                     price={item.price || (item.price12oz ? `${item.price12oz} / ${item.price16oz}` : "")}
-                    priceSingle={item.priceSingle}
-                    priceDouble={item.priceDouble}
-                    rating={item.rating}
                     note={item.note || item.description}
+                    onAddToBasket={onAddToBasket}
                   />
                 </div>
               ))}
@@ -114,16 +115,32 @@ export default function Menu() {
     <section id="menu" className="py-5 bg-light">
       <div className="container text-center mb-5">
         <h2 className="mb-3">BRANDXCOFFEE MENU</h2>
-        <hr className="mx-auto mb-2" style={{ width: "80px", borderTop: "3px solid #f5c06f" }} />
-        <p className="text-muted">Open Hours: 1pm - 9pm | Contact: 09393039528</p>
+        <hr
+          className="mx-auto mb-2"
+          style={{ width: "80px", borderTop: "3px solid #f5c06f" }}
+        />
+        <p className="text-muted">
+          Open Hours: 1pm - 9pm | Contact: 09393039528
+        </p>
       </div>
 
-      {renderMenuSection("ICED COFFEE", featuredIcedCoffee, otherIcedCoffee)}
-      {renderMenuSection("NON-COFFEE (ICED)", featuredNonCoffee, otherNonCoffee)}
-      {renderMenuSection("HOT COFFEE", featuredHotCoffee, otherHotCoffee)}
-      {renderMenuSection("RICE MEALS", featuredRiceMeals, otherRiceMeals)}
-      {renderMenuSection("BURGERS", featuredBurgers, otherBurgers)}
-      {renderMenuSection("DESSERTS", featuredDesserts, otherDesserts)}
+      {(activeCategory === "ALL" || activeCategory === "ICED COFFEE") &&
+        renderMenuSection("ICED COFFEE", featuredIcedCoffee, otherIcedCoffee)}
+
+      {(activeCategory === "ALL" || activeCategory === "NON-COFFEE (ICED)") &&
+        renderMenuSection("NON-COFFEE (ICED)", featuredNonCoffee, otherNonCoffee)}
+
+      {(activeCategory === "ALL" || activeCategory === "HOT COFFEE") &&
+        renderMenuSection("HOT COFFEE", featuredHotCoffee, otherHotCoffee)}
+
+      {(activeCategory === "ALL" || activeCategory === "RICE MEALS") &&
+        renderMenuSection("RICE MEALS", featuredRiceMeals, otherRiceMeals)}
+
+      {(activeCategory === "ALL" || activeCategory === "BURGERS") &&
+        renderMenuSection("BURGERS", featuredBurgers, otherBurgers)}
+
+      {(activeCategory === "ALL" || activeCategory === "DESSERTS") &&
+        renderMenuSection("DESSERTS", featuredDesserts, otherDesserts)}
     </section>
   );
 }

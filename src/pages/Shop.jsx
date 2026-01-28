@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Menu from "../components/FullMenu";
+import BasketSidebar from "../components/BasketSideBar";
 
 export default function Shop() {
   const categories = [
@@ -13,9 +14,40 @@ export default function Shop() {
   ];
 
   const [activeCategory, setActiveCategory] = useState("ALL");
+  const [basketOpen, setBasketOpen] = useState(false);
+  const [basketItems, setBasketItems] = useState([]);
+
+  /* ---------------- ADD TO BASKET ---------------- */
+  const addToBasket = (item) => {
+    setBasketItems((prev) => {
+      const existing = prev.find((i) => i.title === item.title);
+      if (existing) {
+        return prev.map((i) =>
+          i.title === item.title ? { ...i, qty: i.qty + 1 } : i
+        );
+      }
+      return [...prev, { ...item, qty: 1 }];
+    });
+    setBasketOpen(true); // auto open for UX
+  };  
+
+  const removeFromBasket = (index) => {
+    setBasketItems((items) => items.filter((_, i) => i !== index));
+  };
 
   return (
-    <section id="shop" className="shop-page">
+    <section id="shop" className="shop-page position-relative">
+
+
+      {/* Basket Sidebar */}
+      <BasketSidebar
+        isOpen={basketOpen}
+        items={basketItems}
+        onClose={() => setBasketOpen(false)}
+        onRemove={removeFromBasket}
+        onCheckout={() => alert("Checkout coming soon ☕")}
+      />
+
       {/* Hero Banner */}
       <div className="shop-hero position-relative mb-5">
         <div className="shop-overlay" />
@@ -44,7 +76,10 @@ export default function Shop() {
 
       {/* Full Menu */}
       <div className="container">
-        <Menu activeCategory={activeCategory} />
+        <Menu
+          activeCategory={activeCategory}
+          onAddToBasket={addToBasket}
+        />
       </div>
     </section>
   );
