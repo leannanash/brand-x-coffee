@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import MenuItem from "./reusable/MenuItem";
 
 import img4 from "../assets/products/4.jpg"; 
@@ -17,37 +17,10 @@ const menuData = {
     { image: img11, title: "Salted Caramel", price12oz: 80, price16oz: 105 },
     { image: img10, title: "Macchiato", price12oz: 80, price16oz: 105 },
     { image: img4, title: "Peppermint", price12oz: 80, price16oz: 105 },
-    { image: img4, title: "Vanilla", price12oz: 80, price16oz: 105 },
-    { image: img12, title: "Americano", price12oz: 80, price16oz: 105 },
-    { image: img4, title: "White Mocha", price12oz: 80, price16oz: 105 },
-    { image: img4, title: "Spanish Latte", price12oz: 80, price16oz: 105 },
-  ],
-  nonCoffeeIced: [
-    { image: img5, title: "Matcha", price12oz: 80, price16oz: 105 },
-    { image: img5, title: "Matcha Strawberry", price12oz: 80, price16oz: 105 },
-    { image: img5, title: "White Strawberry", price12oz: 80, price16oz: 105 },
-    { image: img5, title: "Ube", price12oz: 80, price16oz: 105 },
-    { image: img5, title: "Chocolate", price12oz: 80, price16oz: 105 },
   ],
   hotCoffee: [
-    { image: img6, title: "Latte", price: 90 },
-    { image: img6, title: "Flat White", price: 90 },
-    { image: img6, title: "Long Black", price: 90 },
-    { image: img6, title: "Specialty Coffee / Pour Over", priceRange: [150, 280], note: "Depends on available beans" },
-  ],
-  riceMeals: [
-    { image: img7, title: "Baczeelog", price: 95, note: "Silog meals with homemade cheese sauce" },
-    { image: img7, title: "Tapzeelog", price: 95, note: "Silog meals with homemade cheese sauce" },
-    { image: img7, title: "Siomaizeelog", price: 95, note: "Silog meals with homemade cheese sauce" },
-    { image: img7, title: "Hotzeelog", price: 95, note: "Silog meals with homemade cheese sauce" },
-  ],
-  burgers: [
-    { image: img8, title: "Xtazee (Caramelized onions, cheese and hms)", priceSingle: 130, priceDouble: 160, description: "100% pure beef" },
-    { image: img8, title: "Clazeek (Tomato, lettuce, cheese and hms)", priceSingle: 130, priceDouble: 160, description: "100% pure beef" },
-    { image: img8, title: "BaconXburger (Clazeek with bacooooon!!!)", priceSingle: 130, priceDouble: 160, description: "100% pure beef" },
-  ],
-  desserts: [
-    { image: img9, title: "Classic Cheesecake", price: 90, rating: 4 },
+    { image: img6, title: "Latte", priceSingle: 90 },
+    { image: img6, title: "Flat White", priceSingle: 90 },
   ],
 };
 
@@ -58,19 +31,41 @@ function splitFeatured(items, featuredCount) {
   };
 }
 
-export default function Menu({ activeCategory, onAddToBasket }) {
-  const { featured: featuredIcedCoffee, others: otherIcedCoffee } =
-    splitFeatured(menuData.icedCoffee, 3);
-  const { featured: featuredNonCoffee, others: otherNonCoffee } =
-    splitFeatured(menuData.nonCoffeeIced, 2);
-  const { featured: featuredHotCoffee, others: otherHotCoffee } =
-    splitFeatured(menuData.hotCoffee, 2);
-  const { featured: featuredRiceMeals, others: otherRiceMeals } =
-    splitFeatured(menuData.riceMeals, 2);
-  const { featured: featuredBurgers, others: otherBurgers } =
-    splitFeatured(menuData.burgers, 1);
-  const { featured: featuredDesserts, others: otherDesserts } =
-    splitFeatured(menuData.desserts, 3);
+export default function Menu({ activeCategory, addToBasket }) {
+  const { featured: featuredIcedCoffee, others: otherIcedCoffee } = splitFeatured(menuData.icedCoffee, 3);
+  const { featured: featuredHotCoffee, others: otherHotCoffee } = splitFeatured(menuData.hotCoffee, 2);
+
+  // ----- CENTRALIZED MODAL STATE -----
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [modalQty, setModalQty] = useState(1);
+  const [modalSize, setModalSize] = useState("12oz");
+
+  const handleOpenModal = (item) => {
+    setSelectedItem(item);
+    setModalQty(1);
+    setModalSize(item.price16oz ? "12oz" : "single");
+    setModalOpen(true);
+  };
+
+  const handleAddToBasket = () => {
+    if (!selectedItem) return;
+
+    const price =
+      modalSize === "12oz" ? selectedItem.price12oz :
+      modalSize === "16oz" ? selectedItem.price16oz :
+      selectedItem.priceSingle ?? 0;
+
+    addToBasket({
+      title: selectedItem.title,
+      image: selectedItem.image,
+      price,
+      size: modalSize,
+      qty: modalQty,
+    });
+
+    setModalOpen(false);
+  };
 
   const renderMenuSection = (title, featuredItems, otherItems) => (
     <div className="menu-section my-5">
@@ -82,9 +77,12 @@ export default function Menu({ activeCategory, onAddToBasket }) {
             <div key={idx} className="col-sm-6 col-md-4 col-lg-3">
               <MenuItem
                 {...item}
-                price={item.price || (item.price12oz ? `${item.price12oz} / ${item.price16oz}` : "")}
-                note={item.note || item.description}
-                onAddToBasket={onAddToBasket}
+                displayPrice={
+                  item.price ??
+                  (item.price12oz ? `${item.price12oz} / ${item.price16oz}` : "") ??
+                  (item.priceSingle ? `${item.priceSingle}` : "")
+                }
+                onOpenModal={() => handleOpenModal(item)}
               />
             </div>
           ))}
@@ -98,9 +96,12 @@ export default function Menu({ activeCategory, onAddToBasket }) {
                 <div key={idx} className="col-sm-6 col-md-4 col-lg-3">
                   <MenuItem
                     {...item}
-                    price={item.price || (item.price12oz ? `${item.price12oz} / ${item.price16oz}` : "")}
-                    note={item.note || item.description}
-                    onAddToBasket={onAddToBasket}
+                    displayPrice={
+                      item.price ??
+                      (item.price12oz ? `${item.price12oz} / ${item.price16oz}` : "") ??
+                      (item.priceSingle ? `${item.priceSingle}` : "")
+                    }
+                    onOpenModal={() => handleOpenModal(item)}
                   />
                 </div>
               ))}
@@ -113,34 +114,67 @@ export default function Menu({ activeCategory, onAddToBasket }) {
 
   return (
     <section id="menu" className="py-5 bg-light">
-      <div className="container text-center mb-5">
-        <h2 className="mb-3">BRANDXCOFFEE MENU</h2>
-        <hr
-          className="mx-auto mb-2"
-          style={{ width: "80px", borderTop: "3px solid #f5c06f" }}
-        />
-        <p className="text-muted">
-          Open Hours: 1pm - 9pm | Contact: 09393039528
-        </p>
-      </div>
-
       {(activeCategory === "ALL" || activeCategory === "ICED COFFEE") &&
         renderMenuSection("ICED COFFEE", featuredIcedCoffee, otherIcedCoffee)}
-
-      {(activeCategory === "ALL" || activeCategory === "NON-COFFEE (ICED)") &&
-        renderMenuSection("NON-COFFEE (ICED)", featuredNonCoffee, otherNonCoffee)}
-
       {(activeCategory === "ALL" || activeCategory === "HOT COFFEE") &&
         renderMenuSection("HOT COFFEE", featuredHotCoffee, otherHotCoffee)}
 
-      {(activeCategory === "ALL" || activeCategory === "RICE MEALS") &&
-        renderMenuSection("RICE MEALS", featuredRiceMeals, otherRiceMeals)}
+      {/* ----- MODAL ----- */}
+      {modalOpen && selectedItem && (
+        <div
+          className="modal-overlay"
+          style={{
+            position: "fixed",
+            top: 0, left: 0,
+            width: "100%", height: "100%",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+          }}
+          onClick={() => setModalOpen(false)}
+        >
+          <div
+            className="modal-dialog bg-white p-4 rounded"
+            style={{ minWidth: "300px" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h5>{selectedItem.title}</h5>
 
-      {(activeCategory === "ALL" || activeCategory === "BURGERS") &&
-        renderMenuSection("BURGERS", featuredBurgers, otherBurgers)}
+            {/* Size */}
+            {(selectedItem.price12oz || selectedItem.price16oz) && (
+              <div className="mb-2">
+                <label>Select Size:</label>
+                <select
+                  value={modalSize}
+                  onChange={(e) => setModalSize(e.target.value)}
+                  className="form-select"
+                >
+                  {selectedItem.price12oz && <option value="12oz">12oz (₱{selectedItem.price12oz})</option>}
+                  {selectedItem.price16oz && <option value="16oz">16oz (₱{selectedItem.price16oz})</option>}
+                </select>
+              </div>
+            )}
 
-      {(activeCategory === "ALL" || activeCategory === "DESSERTS") &&
-        renderMenuSection("DESSERTS", featuredDesserts, otherDesserts)}
+            {/* Quantity */}
+            <div className="mb-3">
+              <label>Quantity:</label>
+              <div className="d-flex align-items-center">
+                <button className="btn btn-sm btn-outline-secondary me-2" onClick={() => setModalQty(q => Math.max(1, q - 1))}>-</button>
+                <span>{modalQty}</span>
+                <button className="btn btn-sm btn-outline-secondary ms-2" onClick={() => setModalQty(q => q + 1)}>+</button>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="text-end">
+              <button className="btn btn-secondary me-2" onClick={() => setModalOpen(false)}>Cancel</button>
+              <button className="btn btn-warning" onClick={handleAddToBasket}>Add to Basket</button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

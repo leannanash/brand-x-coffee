@@ -3,25 +3,20 @@ import React from "react";
 export default function MenuItem({
   image,
   title,
-  price,
+  price12oz,
+  price16oz,
   priceSingle,
   priceDouble,
-  rating,
   note,
-  onAddToBasket,
+  rating,
+  onOpenModal,
 }) {
   const displayPrice =
-    price || (priceSingle ? `${priceSingle} / ${priceDouble}` : null);
-
-  const handleAdd = () => {
-    if (!onAddToBasket) return;
-
-    onAddToBasket({
-      title,
-      image,
-      price: price ?? priceSingle,
-    });
-  };
+    priceSingle
+      ? `${priceSingle} / ${priceDouble}`
+      : price12oz
+      ? `${price12oz} / ${price16oz}`
+      : null;
 
   return (
     <div className="menu-card card text-center shadow-sm h-100">
@@ -37,7 +32,6 @@ export default function MenuItem({
             borderTopRightRadius: "0.5rem",
           }}
         />
-
         {rating && (
           <div className="star-rating position-absolute top-0 end-0 m-2">
             {[...Array(5)].map((_, i) => (
@@ -56,20 +50,16 @@ export default function MenuItem({
 
       <div className="card-body d-flex flex-column">
         <h5 className="card-title">{title}</h5>
-
         {note && (
           <p className="text-muted mb-2" style={{ fontSize: "0.85rem" }}>
             {note}
           </p>
         )}
-
-        {displayPrice && (
-          <h6 className="card-subtitle mb-3">₱{displayPrice}</h6>
-        )}
+        {displayPrice && <h6 className="card-subtitle mb-3">₱{displayPrice}</h6>}
 
         <button
           className="btn btn-outline-warning mt-auto"
-          onClick={handleAdd}
+          onClick={() => onOpenModal && onOpenModal()}
         >
           🛒 Add to Basket
         </button>

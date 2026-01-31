@@ -5,6 +5,7 @@ import AboutUs from "./pages/AboutUs";
 import MainLayout from "./MainLayout";
 import Shop from "./pages/Shop";
 import Contact from "./pages/Contact";
+import Login from "./pages/Login";
 
 
 
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
           {/* Add more routes here as needed */}
         </Routes>
       </MainLayout>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/imgs/logo.jpg";
 
-export default function Header({ cartCount = 0, onBasketToggle }) {
+export default function Header({ cartCount = 0, onBasketToggle, onLoginClick }) {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -60,7 +60,7 @@ export default function Header({ cartCount = 0, onBasketToggle }) {
             </button>
 
             {/* User */}
-            <button className="icon-btn" aria-label="User profile">
+            <button className="icon-btn" aria-label="User profile" onClick={onLoginClick}>
               <i className="fa-solid fa-user"></i>
             </button>
           </div>
