@@ -1,25 +1,25 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
-import AboutUs from "./pages/AboutUs";
-import MainLayout from "./MainLayout";
 import Shop from "./pages/Shop";
+import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
-import Login from "./pages/Login";
-
-
+import Login from "./auth/Login";
 
 export default function App() {
   return (
-      <MainLayout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          {/* Add more routes here as needed */}
-        </Routes>
-      </MainLayout>
+    <Routes>
+      {/* Standalone Login page (no header) */}
+      <Route path="/login" element={<Login />} />
+
+      {/* All other pages with MainLayout */}
+      <Route path="/" element={<MainLayout />}>
+        <Route index element={<Home />} />
+        <Route path="shop" element={<Shop />} />
+        <Route path="about" element={<AboutUs />} />
+        <Route path="contact" element={<Contact />} />
+      </Route>
+    </Routes>
   );
 }

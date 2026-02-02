@@ -1,0 +1,39 @@
+.login-page {
+  min-height: 100vh;
+  padding: 1rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  max-width: 400px;
+  width: 100%;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.9); /* soft white overlay */
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.login-title {
+  font-family: 'Playfair Display', serif;
+  color: #5a3e2b;
+  font-weight: 600;
+  font-size: 1.8rem;
+}
+
+/* Input & button styling inside LoginForm */
+.login-card .form-control {
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.login-card .btn {
+  border-radius: 30px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+}

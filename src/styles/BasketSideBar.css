@@ -1,118 +1,214 @@
+/* Overlay behind basket */
 .basket-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.6); /* slightly darker for focus */
   z-index: 998;
+  backdrop-filter: blur(2px); /* soft blur */
+  transition: opacity 0.3s ease;
 }
 
+/* Sidebar container */
 .basket-sidebar {
   position: fixed;
   top: 0;
-  right: -380px;
-  width: 360px;
+  right: -400px; /* slightly wider */
+  width: 380px;
   height: 100vh;
   background: #1f140d;
   color: #fff;
   z-index: 999;
   display: flex;
   flex-direction: column;
-  transition: right 0.35s ease;
-  box-shadow: -8px 0 20px rgba(0,0,0,0.4);
+  transition: right 0.35s ease, box-shadow 0.35s ease;
+  box-shadow: -8px 0 25px rgba(0, 0, 0, 0.5);
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  overflow: hidden;
 }
 
 .basket-sidebar.open {
   right: 0;
 }
 
+/* Header */
 .basket-header {
-  padding: 1.2rem;
+  padding: 1.4rem 1.2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .basket-header h4 {
   margin: 0;
   font-family: 'Playfair Display', serif;
   color: #f5c06f;
+  font-size: 1.3rem;
 }
 
 .close-btn {
   background: none;
   border: none;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: #fff;
   cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
+.close-btn:hover {
+  transform: rotate(90deg);
+  color: #f5c06f;
+}
+
+/* Basket content */
 .basket-content {
   flex: 1;
-  padding: 1rem;
+  padding: 1.2rem;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #b5895a transparent;
 }
 
+.basket-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.basket-content::-webkit-scrollbar-thumb {
+  background-color: #b5895a;
+  border-radius: 3px;
+}
+
+/* Empty text */
 .empty-text {
   text-align: center;
-  opacity: 0.7;
+  opacity: 0.6;
+  font-style: italic;
 }
 
+/* Individual basket item */
 .basket-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.85rem;
   margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.basket-item:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .basket-item img {
-  width: 55px;
-  height: 55px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+/* Item info */
+.item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 
 .item-info h6 {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffe8c1;
 }
 
 .item-info span {
   font-size: 0.85rem;
-  color: #ffe8c1;
+  color: #ffdca3;
 }
 
+/* Remove button */
 .remove-btn {
   margin-left: auto;
   background: none;
   border: none;
-  color: #ffb4a2;
-  font-size: 1.1rem;
+  color: #ff6b6b;
+  font-size: 1.2rem;
   cursor: pointer;
+  transition: color 0.2s ease;
 }
 
+.remove-btn:hover {
+  color: #ffb4a2;
+}
+
+/* Footer */
 .basket-footer {
-  padding: 1.2rem;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 1.4rem 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .total {
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffdca3;
 }
 
+/* Checkout button */
 .checkout-btn {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   border-radius: 30px;
   border: none;
   background: linear-gradient(135deg, #b5895a, #d4a373);
   color: #fff;
   font-weight: 600;
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.checkout-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .checkout-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.qty-btn {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 1px solid #f5c06f;
+  background-color: #2c1e13;
+  color: #f5c06f;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qty-btn:hover {
+  background-color: #f5c06f;
+  color: #1f140d;
+  border-color: #f5c06f;
+}
+
+.qty-display {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 500;
+  color: #ffe8c1;
+  font-size: 0.9rem;
+}
+

@@ -6,46 +6,88 @@ export default function BasketSidebar({
   onClose,
   onRemove,
   onUpdateQty,
-  onCheckout
+  onCheckout,
 }) {
-  const total = items.reduce((sum, item) => sum + (item.price || 0) * (item.qty || 0), 0);
+  // --- Helper to format price ---
+  const formatPrice = (amount) => `₱${amount.toFixed(2)}`;
+
+  // --- Calculate total ---
+  const total = items.reduce(
+    (sum, item) => sum + (item.price || 0) * (item.qty || 0),
+    0
+  );
 
   return (
     <>
+      {/* Overlay */}
       {isOpen && <div className="basket-overlay" onClick={onClose} />}
-      <aside className={`basket-sidebar ${isOpen ? "open" : ""}`}>
-        <div className="basket-header">
-          <h4>Your Basket</h4>
-          <button onClick={onClose} className="close-btn">×</button>
-        </div>
 
+      {/* Sidebar */}
+      <aside className={`basket-sidebar ${isOpen ? "open" : ""}`}>
+        {/* Header */}
+        <header className="basket-header">
+          <h4>Your Basket</h4>
+          <button onClick={onClose} className="close-btn" aria-label="Close">
+            ×
+          </button>
+        </header>
+
+        {/* Content */}
         <div className="basket-content">
           {items.length === 0 ? (
             <p className="empty-text">Your basket is empty ☕</p>
           ) : (
-            items.map((item, index) => (
-              <div className="basket-item" key={index}>
-                <img src={item.image} alt={item.title} />
-                <div className="item-info">
-                  <h6>{item.title} ({item.size})</h6>
+            items.map((item, index) => {
+              const { image, title, size, price, qty } = item;
+              return (
+                <div className="basket-item" key={index}>
+                  <img src={image} alt={title} />
+                  <div className="item-info">
+                    <h6>
+                      {title} <span style={{ fontWeight: 400 }}>({size})</span>
+                    </h6>
+
                   <div className="d-flex align-items-center">
-                    <button className="qty-btn" onClick={() => onUpdateQty(index, Math.max(1, item.qty - 1))}>-</button>
-                    <span className="mx-2">{item.qty}</span>
-                    <button className="qty-btn" onClick={() => onUpdateQty(index, item.qty + 1)}>+</button>
+                    <button
+                      className="qty-btn"
+                      onClick={() => onUpdateQty(index, Math.max(1, item.qty - 1))}
+                    >
+                      -
+                    </button>
+                    <span className="mx-2 qty-display">{item.qty}</span>
+                    <button
+                      className="qty-btn"
+                      onClick={() => onUpdateQty(index, item.qty + 1)}
+                    >
+                      +
+                    </button>
                   </div>
-                  <span>₱{item.price} × {item.qty} = ₱{item.price * item.qty}</span>
+
+                    <span>
+                      {formatPrice(price)} × {qty} = {formatPrice(price * qty)}
+                    </span>
+                  </div>
+
+                  <button
+                    className="remove-btn"
+                    onClick={() => onRemove(index)}
+                    aria-label="Remove item"
+                  >
+                    ✕
+                  </button>
                 </div>
-                <button className="remove-btn" onClick={() => onRemove(index)}>✕</button>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 
-        <div className="basket-footer">
+        {/* Footer */}
+        <footer className="basket-footer">
           <div className="total">
             <span>Total</span>
-            <strong>₱{total}</strong>
+            <strong>{formatPrice(total)}</strong>
           </div>
+
           <button
             className="checkout-btn"
             disabled={items.length === 0}
@@ -53,7 +95,7 @@ export default function BasketSidebar({
           >
             Checkout
           </button>
-        </div>
+        </footer>
       </aside>
     </>
   );

@@ -67,7 +67,7 @@ export default function MenuPreview() {
 
         {/* CTA */}
         <div className="text-center mt-5">
-          <Link to="/menu" className="btn btn-outline-dark btn-lg px-5">
+          <Link to="/shop" className="btn btn-outline-dark btn-lg px-5">
             View Full Menu
           </Link>
         </div>

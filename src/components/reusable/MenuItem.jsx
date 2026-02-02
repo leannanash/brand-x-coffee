@@ -3,21 +3,11 @@ import React from "react";
 export default function MenuItem({
   image,
   title,
-  price12oz,
-  price16oz,
-  priceSingle,
-  priceDouble,
   note,
   rating,
   onOpenModal,
+  displayPrice,
 }) {
-  const displayPrice =
-    priceSingle
-      ? `${priceSingle} / ${priceDouble}`
-      : price12oz
-      ? `${price12oz} / ${price16oz}`
-      : null;
-
   return (
     <div className="menu-card card text-center shadow-sm h-100">
       <div className="card-img-wrapper position-relative">
@@ -59,7 +49,7 @@ export default function MenuItem({
 
         <button
           className="btn btn-outline-warning mt-auto"
-          onClick={() => onOpenModal && onOpenModal()}
+          onClick={onOpenModal}
         >
           🛒 Add to Basket
         </button>
