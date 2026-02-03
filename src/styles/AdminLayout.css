@@ -1,0 +1,90 @@
+/* --- Layout --- */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f3f3f3;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Sidebar --- */
+.admin-sidebar {
+  width: 250px;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.05);
+}
+
+.sidebar-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #eee;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #b5895a; /* Brand color */
+}
+
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.nav-link {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  color: #555;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background-color: #fbe8c1;
+  color: #b5895a;
+}
+
+.nav-link.active {
+  background-color: #b5895a;
+  color: #fff;
+}
+
+/* --- Sidebar Footer --- */
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #ff6b6b;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #ff3b3b;
+}
+
+/* --- Main Content --- */
+.admin-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.content-wrapper {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  min-height: 80vh;
+}

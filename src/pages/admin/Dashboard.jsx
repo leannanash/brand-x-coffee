@@ -1,7 +1,6 @@
 import React from "react";
 
 export default function Dashboard() {
-  // Fake data for now (later you’ll replace with API data)
   const stats = [
     { label: "Today's Sales", value: "₱ 3,450" },
     { label: "Orders Today", value: "27" },
@@ -16,16 +15,14 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="container-fluid p-4">
-      <h2 className="mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
-        📊 Admin Dashboard
-      </h2>
+    <div className="container-fluid">
+      <h2 className="mb-4">📊 Admin Dashboard</h2>
 
-      {/* Stats Cards */}
-      <div className="row g-4 mb-4">
+      {/* Stats */}
+      <div className="row mb-4">
         {stats.map((stat, idx) => (
-          <div key={idx} className="col-sm-6 col-md-3">
-            <div className="card shadow-sm border-0 rounded-4 p-3 h-100">
+          <div key={idx} className="col-sm-6 col-md-3 mb-3">
+            <div className="card shadow-sm p-3 h-100">
               <small className="text-muted">{stat.label}</small>
               <h4 className="mt-2 mb-0">{stat.value}</h4>
             </div>
@@ -34,8 +31,8 @@ export default function Dashboard() {
       </div>
 
       {/* Recent Orders */}
-      <div className="card shadow-sm border-0 rounded-4">
-        <div className="card-header bg-white">
+      <div className="card shadow-sm">
+        <div className="card-header">
           <h5 className="mb-0">Recent Orders</h5>
         </div>
         <div className="card-body p-0">
@@ -67,13 +64,6 @@ export default function Dashboard() {
                   </td>
                 </tr>
               ))}
-              {recentOrders.length === 0 && (
-                <tr>
-                  <td colSpan="4" className="text-center text-muted py-4">
-                    No orders yet
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
         </div>

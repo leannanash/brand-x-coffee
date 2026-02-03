@@ -1,0 +1,105 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+  background: #f5f5f5;
+}
+
+/* Title */
+.dashboard-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #b5895a;
+  margin-bottom: 1rem;
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  border-top: 5px solid #b5895a; /* dynamic later per stat */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  color: #333;
+}
+
+/* Orders Table */
+.orders-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+.orders-title {
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #eee;
+  color: #555;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 0.75rem 1.25rem;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.orders-table th {
+  background: #fafafa;
+  font-weight: 600;
+  color: #555;
+}
+
+.order-status {
+  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.order-status.completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.order-status.preparing {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.no-orders {
+  text-align: center;
+  padding: 1.5rem;
+  color: #999;
+}
