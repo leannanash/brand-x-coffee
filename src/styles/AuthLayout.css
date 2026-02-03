@@ -1,0 +1,21 @@
+.auth-layout {
+  min-height: 100vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 1rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+}
+
+.auth-title {
+  font-family: "Playfair Display", serif;
+  color: #5a3e2b;
+}

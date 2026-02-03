@@ -43,7 +43,8 @@ export default function MainLayout() {
         onLoginClick={() => setLoginOpen(true)}
       />
 
-      <main style={{ minHeight: "calc(100vh - 70px)" }}>
+      {/* 👇 This renders Home / Shop / About / Contact */}
+      <main>
         <Outlet />
       </main>
 

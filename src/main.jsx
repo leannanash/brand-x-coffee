@@ -19,6 +19,8 @@ import './styles/Menu.css';
 import './styles/StoreLocation.css';
 import "./styles/BasketSidebar.css";
 import "./styles/Login.css";
+import "./styles/AuthLayout.css";
+
 
 
 createRoot(document.getElementById("root")).render(
