@@ -20,9 +20,6 @@ export default function AdminLayout() {
           <NavLink to="/admin/orders" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
             Orders
           </NavLink>
-          <NavLink to="/admin/inventory" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
-            Inventory
-          </NavLink>
         </nav>
 
         <div className="sidebar-footer">

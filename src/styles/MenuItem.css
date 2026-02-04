@@ -1,126 +1,105 @@
 /* MenuItem.css */
-
-/* Card Container */
 .menu-card {
-    background-color: #fff;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .menu-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-  }
-  
-  /* Image Wrapper */
-  .card-img-wrapper {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .card-img-wrapper img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
-    transition: transform 0.3s ease;
-  }
-  
-  .menu-card:hover .card-img-wrapper img {
-    transform: scale(1.05);
-  }
-  
-  /* Star Rating */
-  .star-rating {
-    display: flex;
-    gap: 2px;
-  }
-  
-  .star-rating i {
-    font-size: 0.85rem;
-  }
-  
-  /* Card Body */
-  .card-body {
-    padding: 1rem;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  /* Title */
-  .card-title {
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    color: #2c2c2c;
-  }
-  
-  /* Note / Description */
-  .card-body .text-muted {
-    font-size: 0.85rem;
-    color: #777;
-    margin-bottom: 0.5rem;
-    flex-grow: 0;
-  }
-  
-  /* Price */
-  .card-subtitle {
-    font-weight: 700;
-    font-size: 1rem;
-    color: #f5c06f;
-    margin-bottom: 0.75rem;
-  }
-  
-  /* Button */
-  .menu-card .btn {
-    border-radius: 0.5rem;
-    font-weight: 600;
-    color: #f5c06f;
-    border-color: #f5c06f;
-    transition: all 0.3s ease;
-  }
-  
-  .menu-card .btn:hover {
-    background-color: #f5c06f;
-    color: #fff;
-    border-color: #f5c06f;
-  }
-
-  .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0,0,0,0.5);
+  background-color: #fff;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1050; /* above everything */
+  flex-direction: column;
+  height: 100%;
 }
 
-.modal-dialog {
-  background: #fff;
+.menu-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.card-img-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-img-wrapper img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.menu-card:hover .card-img-wrapper img {
+  transform: scale(1.05);
+}
+
+/* Featured badge */
+.featured-item .badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Card Body */
+.card-body {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Title */
+.card-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #2c2c2c;
+}
+
+/* Note / Description */
+.card-body .text-muted {
+  font-size: 0.85rem;
+  color: #777;
+  margin-bottom: 0.5rem;
+  flex-grow: 0;
+}
+
+/* Price */
+.card-subtitle {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #f5c06f;
+  margin-bottom: 0.75rem;
+}
+
+/* Button */
+.menu-card .btn {
   border-radius: 0.5rem;
-  padding: 1.5rem;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-    .card-img-wrapper img {
-      height: 160px;
-    }
+.menu-card .btn-warning {
+  background-color: #f5c06f;
+  border-color: #f5c06f;
+  color: #2c2c2c;
+}
+
+.menu-card .btn-warning:hover {
+  background-color: #ffc107;
+  color: #2c2c2c;
+  border-color: #ffc107;
+}
+
+/* Star rating */
+.star-rating i {
+  margin-left: 1px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card-img-wrapper img {
+    height: 160px;
   }
-  
+}

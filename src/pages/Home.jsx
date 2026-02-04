@@ -1,6 +1,5 @@
 import React from "react";
 import HomeSection from "../components/HomeSection";
-import MenuPreview from "../components/MenuPreview";
 import StoreLocationPreview from "../components/StoreLocationPreview";
 
 export default function Home() {
@@ -9,7 +8,6 @@ export default function Home() {
     
       <main className="home">
         <HomeSection />
-        <MenuPreview/>                
         <StoreLocationPreview/>
       </main>
     </>

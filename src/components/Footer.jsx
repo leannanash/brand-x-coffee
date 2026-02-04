@@ -10,7 +10,6 @@ import insta4 from "../assets/products/4.jpg";
 import insta5 from "../assets/products/5.jpg";
 
 export default function Footer() {
-  const menuItems = ["Coffee", "Matcha", "Milk-Based Drinks", "Rice Meals", "Snacks"];
   const socialLinks = [
     { icon: "facebook", label: "Facebook" },
     { icon: "instagram", label: "Instagram" },
@@ -35,19 +34,6 @@ export default function Footer() {
               </p>
             </div>
 
-            {/* Menu */}
-            <div className="col-lg-3 col-md-6">
-              <h5 className="footer-heading">Menu</h5>
-              <ul className="footer-links list-unstyled">
-                {menuItems.map((item) => (
-                  <li key={item}>
-                    <a href="#" className="footer-link">
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
 
             {/* Contact */}
             <div className="col-lg-3 col-md-6">

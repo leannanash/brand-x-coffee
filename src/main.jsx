@@ -15,13 +15,13 @@ import "./styles/Footer.css"; // new stylesheet
 import "./styles/Home.css";
 import "./styles/HomeSection.css";
 import './styles/MenuItem.css';
-import './styles/Menu.css';
 import './styles/StoreLocation.css';
 import "./styles/BasketSidebar.css";
 import "./styles/Login.css";
 import "./styles/AuthLayout.css";
 import "./styles/AdminLayout.css"; 
 import "./styles/Dashboard.css"; 
+import "./styles/Shop.css"; 
 
 
 

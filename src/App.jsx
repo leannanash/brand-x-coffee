@@ -15,7 +15,6 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import Dashboard from "./pages/admin/Dashboard";
 import Products from "./pages/admin/Products";
 import Orders from "./pages/admin/Orders";
-import Inventory from "./pages/admin/Inventory";
 
 export default function App() {
   return (
@@ -40,7 +39,6 @@ export default function App() {
         <Route index element={<Dashboard />} />
         <Route path="products" element={<Products />} />
         <Route path="orders" element={<Orders />} />
-        <Route path="inventory" element={<Inventory />} />
       </Route>
     </Routes>
   );
