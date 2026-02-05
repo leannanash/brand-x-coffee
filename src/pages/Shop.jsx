@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BasketSidebar from "../components/BasketSideBar";
 import MenuItem from "../components/MenuItem";
+import AddToBasketModal from "../components/AddToBasketModal";
 
 const getMenu = () => {
   const saved = localStorage.getItem("menuData");
@@ -89,7 +90,7 @@ export default function Shop() {
       setModalOpen(false);
       setModalClosing(false);
       setSelectedItem(null);
-    }, 300); // match CSS animation duration
+    }, 250);
   };
 
   const getUnitPrice = () => {
@@ -135,7 +136,7 @@ export default function Shop() {
         </p>
       </div>
 
-      <div className="category-bar sticky-top bg-white shadow-sm py-3 zindex-10 mb-4">
+      <div className="category-bar bg-white shadow-sm py-3 zindex-10 mb-4">
         <div className="container text-center">
           {categories.map((cat) => (
             <button
@@ -194,63 +195,22 @@ export default function Shop() {
         })}
       </div>
 
-{/* --- Modal --- */}
-{modalOpen && selectedItem && (
-  <div
-    className={`modal-backdrop ${modalOpen ? "fade-in" : "fade-out"}`}
-    onClick={() => setModalOpen(false)}
-    style={{
-      position: "fixed",
-      top: 0, left: 0,
-      width: "100%", height: "100%",
-      backgroundColor: "rgba(0,0,0,0.5)",
-      display: "flex", justifyContent: "center", alignItems: "center",
-      zIndex: 9999,
-      transition: "opacity 0.3s ease"
-    }}
-  >
-    <div
-      className="bg-white p-4 rounded shadow-lg"
-      style={{ minWidth: "320px" }}
-      onClick={(e) => e.stopPropagation()} // important!
-    >
-      <h5>{selectedItem.title}</h5>
+      {/* --- Modal --- */}
+      <AddToBasketModal
+        open={modalOpen}
+        closing={modalClosing}
+        item={selectedItem}
+        qty={modalQty}
+        size={modalSize}
+        setQty={setModalQty}
+        setSize={setModalSize}
+        getUnitPrice={getUnitPrice}
+        totalPrice={totalPrice}
+        onClose={closeModal}
+        onAdd={handleAddFromModal}
+      />
 
-      {(selectedItem.price12oz || selectedItem.price16oz) && (
-        <div className="mb-2">
-          <label>Select Size:</label>
-          <select
-            className="form-select"
-            value={modalSize}
-            onChange={e => setModalSize(e.target.value)}
-          >
-            {selectedItem.price12oz && <option value="12oz">12oz (₱{selectedItem.price12oz})</option>}
-            {selectedItem.price16oz && <option value="16oz">16oz (₱{selectedItem.price16oz})</option>}
-          </select>
-        </div>
-      )}
 
-      <div className="mb-3">
-        <label>Quantity:</label>
-        <div className="d-flex align-items-center">
-          <button className="btn btn-sm btn-outline-secondary me-2" onClick={() => setModalQty(q => Math.max(1, q - 1))}>-</button>
-          <span>{modalQty}</span>
-          <button className="btn btn-sm btn-outline-secondary ms-2" onClick={() => setModalQty(q => q + 1)}>+</button>
-        </div>
-      </div>
-
-      <div className="mb-3">
-        <strong>Unit Price:</strong> ₱{getUnitPrice()} <br />
-        <strong>Total:</strong> ₱{totalPrice}
-      </div>
-
-      <div className="text-end">
-        <button className="btn btn-secondary me-2" onClick={() => setModalOpen(false)}>Cancel</button>
-        <button className="btn btn-warning" onClick={handleAddFromModal}>Add to Basket</button>
-      </div>
-    </div>
-  </div>
-)}
 
 
     </section>

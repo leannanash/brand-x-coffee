@@ -22,6 +22,7 @@ import "./styles/AuthLayout.css";
 import "./styles/AdminLayout.css"; 
 import "./styles/Dashboard.css"; 
 import "./styles/Shop.css"; 
+import "./styles/AddToBasketModal.css";
 
 
 
