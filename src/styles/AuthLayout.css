@@ -4,18 +4,83 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  position: relative;
   padding: 1rem;
 }
 
-.auth-card {
-  width: 100%;
-  max-width: 420px;
-  backdrop-filter: blur(6px);
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
+/* Dark overlay for readability */
+.auth-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.55),
+    rgba(0, 0, 0, 0.35)
+  );
+  backdrop-filter: blur(3px);
 }
 
-.auth-title {
+/* Card styling */
+.auth-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.94);
+  border: none;
+  animation: fadeUp 0.5s ease;
+  backdrop-filter: blur(6px);
+}
+
+/* Brand title */
+.auth-brand {
   font-family: "Playfair Display", serif;
   color: #5a3e2b;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Headings inside card */
+.auth-card h3 {
+  font-weight: 600;
+  color: #5a3e2b;
+}
+
+.auth-card p {
+  font-size: 0.9rem;
+}
+
+/* Inputs */
+.auth-card .form-control {
+  border-radius: 0.6rem;
+  padding: 0.65rem 0.8rem;
+}
+
+/* Buttons */
+.auth-card .btn {
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+}
+
+/* Primary button accent */
+.auth-card .btn-primary {
+  background-color: #c98b4a;
+  border-color: #c98b4a;
+}
+
+.auth-card .btn-primary:hover {
+  background-color: #b87a3e;
+  border-color: #b87a3e;
+}
+
+/* Subtle entrance animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }

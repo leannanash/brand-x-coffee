@@ -1,24 +1,63 @@
-import React from "react";
-import LoginForm from "../../components/reusable/LoginForm";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import AuthMotionWrapper from "./AuthMotionWrapper";
 
-export default function Login() {
-  const handleLogin = (data) => {
-    alert(`Logged in as ${data.email}`);
+export default function ForgotPassword() {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setMessage("");
+    setLoading(true);
+
+    try {
+      // TODO: replace with real API call
+      await new Promise((res) => setTimeout(res, 1200));
+      setMessage("Password reset link sent to your email.");
+    } catch (err) {
+      setError("Failed to send reset link. Try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <>
-      <h2 className="auth-title text-center mb-4">
-        Login to Brand X Coffee
-      </h2>
+    <AuthMotionWrapper>
+      <h3 className="text-center mb-1">Forgot Password</h3>
+      <p className="text-center text-muted mb-4">
+        We’ll send you a reset link 📧
+      </p>
 
-      <LoginForm onSubmit={handleLogin} />
+      {error && <div className="alert alert-danger">{error}</div>}
+      {message && <div className="alert alert-success">{message}</div>}
 
-      <div className="text-center mt-3">
-        <small className="text-muted">
-          Forgot password? Register? (later)
-        </small>
-      </div>
-    </>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <input
+            type="email"
+            className="form-control"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+
+        <button className="btn btn-primary w-100" disabled={loading}>
+          {loading ? "Sending..." : "Send Reset Link"}
+        </button>
+
+        <div className="text-center mt-3">
+          <small>
+            Remembered your password?{" "}
+            <Link to="/login">Back to Login</Link>
+          </small>
+        </div>
+      </form>
+    </AuthMotionWrapper>
   );
 }
