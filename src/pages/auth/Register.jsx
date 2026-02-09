@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthMotionWrapper from "./AuthMotionWrapper";
 import { getPasswordStrength } from "../../utils/passwordStrength";
+import { register as apiRegister, login as apiLogin } from "../../utils/auth";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -12,6 +13,7 @@ export default function Register() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const strength = getPasswordStrength(form.password);
 
@@ -31,11 +33,17 @@ export default function Register() {
     setLoading(true);
 
     try {
-      // TODO: replace with real API call
-      await new Promise((res) => setTimeout(res, 1200));
-      alert("Registered successfully!");
+      // 1️⃣ Register the user
+      await apiRegister(form.name, form.email, form.password);
+
+      // 2️⃣ Auto-login after successful registration
+      const result = await apiLogin(form.email, form.password);
+
+      // 3️⃣ Redirect based on role
+      if (result.user.role === "admin") navigate("/admin");
+      else navigate("/shop");
     } catch (err) {
-      setError("Registration failed. Please try again.");
+      setError(err.message || "Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -44,9 +52,7 @@ export default function Register() {
   return (
     <AuthMotionWrapper>
       <h3 className="text-center mb-1">Create Account</h3>
-      <p className="text-center text-muted mb-4">
-        Join Brand X Coffee ☕
-      </p>
+      <p className="text-center text-muted mb-4">Join Brand X Coffee ☕</p>
 
       {error && <div className="alert alert-danger">{error}</div>}
 
@@ -57,6 +63,7 @@ export default function Register() {
             className="form-control"
             placeholder="Full Name"
             onChange={handleChange}
+            value={form.name}
             required
           />
         </div>
@@ -68,6 +75,7 @@ export default function Register() {
             className="form-control"
             placeholder="Email"
             onChange={handleChange}
+            value={form.email}
             required
           />
         </div>
@@ -79,6 +87,7 @@ export default function Register() {
             className="form-control"
             placeholder="Password"
             onChange={handleChange}
+            value={form.password}
             required
           />
         </div>
@@ -104,6 +113,7 @@ export default function Register() {
             className="form-control"
             placeholder="Confirm Password"
             onChange={handleChange}
+            value={form.confirmPassword}
             required
           />
         </div>
@@ -114,8 +124,7 @@ export default function Register() {
 
         <div className="text-center mt-3">
           <small>
-            Already have an account?{" "}
-            <Link to="/login">Login</Link>
+            Already have an account? <Link to="/login">Login</Link>
           </small>
         </div>
       </form>

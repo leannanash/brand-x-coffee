@@ -1,30 +1,33 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthMotionWrapper from "./AuthMotionWrapper";
 import LoginForm from "../../components/reusable/LoginForm";
+import { login as apiLogin } from "../../utils/auth"; // use new auth.js
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async (data) => {
     setError("");
     setLoading(true);
 
     try {
-      console.log("Login:", data);
-      // TODO: call API
-      await new Promise((res) => setTimeout(res, 1200));
-      alert("Logged in!");
+      // Call auth.js login function (handles saving access + refresh tokens)
+      const result = await apiLogin(data.email, data.password);
+
+      // Redirect based on user role
+      if (result.user.role === "admin") navigate("/admin");
+      else navigate("/shop");
     } catch (err) {
-      setError("Invalid email or password.");
+      setError(err.message || "Invalid email or password.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleLogin = () => {
-    // TODO: integrate real Google OAuth
     alert("Google Sign-In coming soon 🚀");
   };
 
@@ -37,7 +40,7 @@ export default function Login() {
 
       {error && <div className="alert alert-danger">{error}</div>}
 
-      {/* Google Sign In */}
+      {/* Google Sign-In */}
       <button
         className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center gap-2 mb-3"
         onClick={handleGoogleLogin}

@@ -1,10 +1,32 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/imgs/logo.jpg";
 
-export default function Header({ cartCount = 0, onBasketToggle, onLoginClick }) {
+export default function Header({ cartCount = 0, onBasketToggle }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  // Check login state from localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      setUser(null);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setUser(null);
+    setAccountOpen(false);
+    navigate("/login");
+  };
 
   const navLinks = [
     { label: "Home", path: "/" },
@@ -45,24 +67,60 @@ export default function Header({ cartCount = 0, onBasketToggle, onLoginClick }) 
           ))}
 
           {/* Right icons */}
-          <div className="navbar-icons ms-auto">
-            {/* View Basket */}
+          <div className="navbar-icons ms-auto d-flex align-items-center gap-2">
+            {/* Cart */}
             <button
               className="icon-btn position-relative"
               aria-label="View basket"
               onClick={onBasketToggle}
             >
               <i className="fa-solid fa-bag-shopping"></i>
+              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+            </button>
 
-              {cartCount > 0 && (
-                <span className="cart-badge">{cartCount}</span>
+            {/* Account */}
+            <div className="position-relative">
+              <button
+                className="icon-btn"
+                aria-label="Account"
+                onClick={() => setAccountOpen(!accountOpen)}
+              >
+                <i className="fa-solid fa-user"></i> Account
+              </button>
+
+              {accountOpen && (
+                <div className="account-dropdown position-absolute end-0 mt-2 shadow bg-white p-2 rounded">
+                  {user ? (
+                    <>
+                      <div className="dropdown-item text-muted">Logged in as</div>
+                      <div className="dropdown-item fw-bold">{user.name}</div>
+                      <hr className="my-1" />
+                      <Link
+                        to="/profile"
+                        className="dropdown-item"
+                        onClick={() => setAccountOpen(false)}
+                      >
+                        Profile
+                      </Link>
+                      <button
+                        className="dropdown-item text-danger"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <Link
+                      to="/login"
+                      className="dropdown-item"
+                      onClick={() => setAccountOpen(false)}
+                    >
+                      Login / Register
+                    </Link>
+                  )}
+                </div>
               )}
-            </button>
-
-            {/* User */}
-            <button className="icon-btn" aria-label="User profile" onClick={onLoginClick}>
-              <i className="fa-solid fa-user"></i>
-            </button>
+            </div>
           </div>
         </div>
       </div>

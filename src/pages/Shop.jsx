@@ -4,7 +4,7 @@ import MenuItem from "../components/MenuItem";
 import AddToBasketModal from "../components/AddToBasketModal";
 
 const getMenu = () => {
-  const saved = localStorage.getItem("menuData");
+  const saved = localStorage.getItem("GET /api/products");
   return saved ? JSON.parse(saved) : [];
 };
 
@@ -126,7 +126,7 @@ export default function Shop() {
         onClose={() => setBasketOpen(false)}
         onRemove={removeFromBasket}
         onUpdateQty={updateQty}
-        onCheckout={() => alert("Checkout coming soon ☕")}
+        onCheckout={() => alert("GET /api/products")}
       />
 
       <div className="shop-hero text-center mb-5">
@@ -209,8 +209,6 @@ export default function Shop() {
         onClose={closeModal}
         onAdd={handleAddFromModal}
       />
-
-
 
 
     </section>

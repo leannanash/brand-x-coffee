@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; 
 import { Link } from "react-router-dom";
 import AuthMotionWrapper from "./AuthMotionWrapper";
 
@@ -15,11 +15,21 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      // TODO: replace with real API call
-      await new Promise((res) => setTimeout(res, 1200));
-      setMessage("Password reset link sent to your email.");
+      const res = await fetch("http://localhost:5000/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.message || "Failed to send reset link");
+      }
+
+      setMessage(result.message || "Password reset link sent to your email.");
     } catch (err) {
-      setError("Failed to send reset link. Try again.");
+      setError(err.message || "Failed to send reset link. Try again.");
     } finally {
       setLoading(false);
     }
@@ -53,8 +63,7 @@ export default function ForgotPassword() {
 
         <div className="text-center mt-3">
           <small>
-            Remembered your password?{" "}
-            <Link to="/login">Back to Login</Link>
+            Remembered your password? <Link to="/login">Back to Login</Link>
           </small>
         </div>
       </form>
