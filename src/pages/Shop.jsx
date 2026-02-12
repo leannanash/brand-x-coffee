@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import BasketSidebar from "../components/BasketSideBar";
 import MenuItem from "../components/MenuItem";
 import AddToBasketModal from "../components/AddToBasketModal";
-
-const getMenu = () => {
-  const saved = localStorage.getItem("GET /api/products");
-  return saved ? JSON.parse(saved) : [];
-};
+import { getProducts } from "../utils/products";
 
 const splitFeatured = (items, featuredCount = 2) => ({
   featured: items.slice(0, featuredCount),
@@ -14,50 +10,52 @@ const splitFeatured = (items, featuredCount = 2) => ({
 });
 
 export default function Shop() {
-  const categories = [
-    "ALL",
-    "ICED COFFEE",
-    "NON-COFFEE (ICED)",
-    "HOT COFFEE",
-    "RICE MEALS",
-    "BURGERS",
-    "DESSERTS",
-  ];
-
   const [activeCategory, setActiveCategory] = useState("ALL");
-  const [menuItems, setMenuItems] = useState(getMenu());
-
-  // Basket state
+  const [menuItems, setMenuItems] = useState([]);
   const [basketOpen, setBasketOpen] = useState(false);
   const [basketItems, setBasketItems] = useState(
     JSON.parse(localStorage.getItem("basket") || "[]")
   );
 
-  
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalClosing, setModalClosing] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [modalQty, setModalQty] = useState(1);
+  const [modalSize, setModalSize] = useState("12oz");
 
+  // Fetch menu from backend
   useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === "menuData") setMenuItems(getMenu());
+    const fetchMenu = async () => {
+      try {
+        const data = await getProducts();
+        setMenuItems(data);
+      } catch (err) {
+        console.error(err);
+        alert("Failed to fetch products");
+      }
     };
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
+    fetchMenu();
   }, []);
 
+  // Persist basket in localStorage
   useEffect(() => {
     localStorage.setItem("basket", JSON.stringify(basketItems));
   }, [basketItems]);
 
+  // ===== BASKET ACTIONS =====
   const addItemToBasket = (item) => {
     setBasketItems((prev) => {
       const existing = prev.find(
-        (i) => i.title === item.title && i.size === item.size
+        (i) => i.id === item.id && i.size === item.size
       );
-      if (existing)
+      if (existing) {
         return prev.map((i) =>
-          i.title === item.title && i.size === item.size
+          i.id === item.id && i.size === item.size
             ? { ...i, qty: i.qty + item.qty }
             : i
         );
+      }
       return [...prev, item];
     });
     setBasketOpen(true);
@@ -65,22 +63,17 @@ export default function Shop() {
 
   const removeFromBasket = (index) =>
     setBasketItems((prev) => prev.filter((_, i) => i !== index));
+
   const updateQty = (index, qty) =>
     setBasketItems((prev) =>
       prev.map((item, i) => (i === index ? { ...item, qty } : item))
     );
 
-  // Modal
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalClosing, setModalClosing] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [modalQty, setModalQty] = useState(1);
-  const [modalSize, setModalSize] = useState("12oz");
-
+  // ===== MODAL ACTIONS =====
   const openModal = (item) => {
     setSelectedItem(item);
     setModalQty(1);
-    setModalSize(item.price16oz ? "12oz" : "single");
+    setModalSize(item.price_12oz ? "12oz" : "single");
     setModalOpen(true);
   };
 
@@ -95,11 +88,9 @@ export default function Shop() {
 
   const getUnitPrice = () => {
     if (!selectedItem) return 0;
-    return modalSize === "12oz"
-      ? selectedItem.price12oz
-      : modalSize === "16oz"
-      ? selectedItem.price16oz
-      : selectedItem.priceSingle ?? 0;
+    if (modalSize === "12oz") return selectedItem.price_12oz ?? 0;
+    if (modalSize === "16oz") return selectedItem.price_16oz ?? 0;
+    return selectedItem.price_single ?? 0;
   };
 
   const totalPrice = getUnitPrice() * modalQty;
@@ -115,8 +106,11 @@ export default function Shop() {
     closeModal();
   };
 
+  // Dynamic categories from products
   const categoriesToRender =
-    activeCategory === "ALL" ? categories.slice(1) : [activeCategory];
+    activeCategory === "ALL"
+      ? [...new Set(menuItems.map((item) => item.category))]
+      : [activeCategory];
 
   return (
     <section id="shop" className="shop-page py-5">
@@ -126,7 +120,7 @@ export default function Shop() {
         onClose={() => setBasketOpen(false)}
         onRemove={removeFromBasket}
         onUpdateQty={updateQty}
-        onCheckout={() => alert("GET /api/products")}
+        onCheckout={() => alert("Checkout not implemented")}
       />
 
       <div className="shop-hero text-center mb-5">
@@ -138,7 +132,7 @@ export default function Shop() {
 
       <div className="category-bar bg-white shadow-sm py-3 zindex-10 mb-4">
         <div className="container text-center">
-          {categories.map((cat) => (
+          {categoriesToRender.map((cat) => (
             <button
               key={cat}
               className={`btn btn-outline-warning mx-2 my-1 ${
@@ -166,11 +160,7 @@ export default function Shop() {
               <div className="row g-4">
                 {featured.map((item) => (
                   <div key={item.id} className="col-sm-6 col-md-4 col-lg-3">
-                    <MenuItem
-                      {...item}
-                      onOpenModal={() => openModal(item)}
-                      featured
-                    />
+                    <MenuItem {...item} onOpenModal={() => openModal(item)} featured />
                   </div>
                 ))}
               </div>
@@ -181,10 +171,7 @@ export default function Shop() {
                   <div className="row g-3">
                     {others.map((item) => (
                       <div key={item.id} className="col-sm-6 col-md-4 col-lg-3">
-                        <MenuItem
-                          {...item}
-                          onOpenModal={() => openModal(item)}
-                        />
+                        <MenuItem {...item} onOpenModal={() => openModal(item)} />
                       </div>
                     ))}
                   </div>
@@ -195,7 +182,6 @@ export default function Shop() {
         })}
       </div>
 
-      {/* --- Modal --- */}
       <AddToBasketModal
         open={modalOpen}
         closing={modalClosing}
@@ -209,8 +195,6 @@ export default function Shop() {
         onClose={closeModal}
         onAdd={handleAddFromModal}
       />
-
-
     </section>
   );
 }
