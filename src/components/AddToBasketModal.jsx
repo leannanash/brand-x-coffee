@@ -8,7 +8,6 @@ export default function AddToBasketModal({
   size,
   setQty,
   setSize,
-  getUnitPrice,
   totalPrice,
   onClose,
   onAdd,
@@ -17,9 +16,9 @@ export default function AddToBasketModal({
 
   // Determine available sizes
   const availableSizes = [];
-  if (item.price_12oz) availableSizes.push({ label: "12oz", price: item.price_12oz });
-  if (item.price_16oz) availableSizes.push({ label: "16oz", price: item.price_16oz });
-  if (item.price_single) availableSizes.push({ label: "Single", price: item.price_single });
+  if (item.price12oz) availableSizes.push({ label: "12oz", price: item.price12oz });
+  if (item.price16oz) availableSizes.push({ label: "16oz", price: item.price16oz });
+  if (item.pricesingle) availableSizes.push({ label: "Single", price: item.pricesingle });
 
   return (
     <div
@@ -35,15 +34,15 @@ export default function AddToBasketModal({
           <div className="modal-image-wrapper mb-3 text-center">
             <img
               src={item.image_url}
-              alt={item.name}
+              alt={item.title}
               className="modal-image"
               style={{ maxHeight: 200, objectFit: "cover" }}
             />
           </div>
         )}
 
-        {/* Product Name */}
-        <h5 className="mb-3 text-center">{item.name}</h5>
+        {/* Product Title */}
+        <h5 className="mb-3 text-center">{item.title}</h5>
 
         {/* Size Selector */}
         {availableSizes.length > 0 && (
