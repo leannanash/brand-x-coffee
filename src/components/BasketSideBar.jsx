@@ -2,94 +2,81 @@ import React from "react";
 
 export default function BasketSidebar({
   isOpen,
-  items = [],
+  items,
   onClose,
   onRemove,
   onUpdateQty,
   onCheckout,
 }) {
-  // --- Helper to format price ---
-  const formatPrice = (amount) => `₱${amount.toFixed(2)}`;
+  const formatPrice = (amount) => `₱${Number(amount).toFixed(2)}`;
 
-  // --- Calculate total ---
-  const total = items.reduce(
-    (sum, item) => sum + (item.price || 0) * (item.qty || 0),
-    0
-  );
+  const total = items.reduce((sum, item) => sum + Number(item.price) * Number(item.qty), 0);
 
   return (
     <>
-      {/* Overlay */}
-      {isOpen && <div className="basket-overlay" onClick={onClose} />}
+      {isOpen && (
+        <div
+          className="basket-overlay"
+          onClick={onClose}
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            zIndex: 998,
+          }}
+        />
+      )}
 
-      {/* Sidebar */}
-      <aside className={`basket-sidebar ${isOpen ? "open" : ""}`}>
-        {/* Header */}
-        <header className="basket-header">
+      <aside
+        className={`basket-sidebar ${isOpen ? "open" : ""}`}
+        style={{
+          position: "fixed",
+          top: 0,
+          right: isOpen ? 0 : "-400px",
+          width: 350,
+          height: "100%",
+          background: "#fff",
+          boxShadow: "-4px 0 20px rgba(0,0,0,0.2)",
+          zIndex: 999,
+          transition: "right 0.3s ease",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <header className="basket-header" style={{ padding: 20, borderBottom: "1px solid #eee" }}>
           <h4>Your Basket</h4>
-          <button onClick={onClose} className="close-btn" aria-label="Close">
-            ×
-          </button>
+          <button onClick={onClose} style={{ float: "right", fontSize: 20, border: "none", background: "none" }}>×</button>
         </header>
 
-        {/* Content */}
-        <div className="basket-content">
+        <div className="basket-content" style={{ flex: 1, overflowY: "auto", padding: 20 }}>
           {items.length === 0 ? (
-            <p className="empty-text">Your basket is empty ☕</p>
+            <p>Your basket is empty ☕</p>
           ) : (
-            items.map((item, index) => {
-              const { image, title, size, price, qty } = item;
-              return (
-                <div className="basket-item" key={index}>
-                  <img src={image} alt={title} />
-                  <div className="item-info">
-                    <h6>
-                      {title} <span style={{ fontWeight: 400 }}>({size})</span>
-                    </h6>
-
-                  <div className="d-flex align-items-center">
-                    <button
-                      className="qty-btn"
-                      onClick={() => onUpdateQty(index, Math.max(1, item.qty - 1))}
-                    >
-                      -
-                    </button>
-                    <span className="mx-2 qty-display">{item.qty}</span>
-                    <button
-                      className="qty-btn"
-                      onClick={() => onUpdateQty(index, item.qty + 1)}
-                    >
-                      +
-                    </button>
-                  </div>
-
-                    <span>
-                      {formatPrice(price)} × {qty} = {formatPrice(price * qty)}
-                    </span>
-                  </div>
-
-                  <button
-                    className="remove-btn"
-                    onClick={() => onRemove(index)}
-                    aria-label="Remove item"
-                  >
-                    ✕
-                  </button>
+            items.map((item, index) => (
+              <div key={`${item.id}-${item.size}`} style={{ marginBottom: 15, borderBottom: "1px solid #eee", paddingBottom: 10 }}>
+                <img src={item.image} alt={item.title} style={{ width: "100%", maxHeight: 120, objectFit: "cover", borderRadius: 8 }} />
+                <h6>{item.title} ({item.size})</h6>
+                <div className="d-flex align-items-center gap-2">
+                  <button onClick={() => onUpdateQty(index, Math.max(1, item.qty - 1))}>−</button>
+                  <span>{item.qty}</span>
+                  <button onClick={() => onUpdateQty(index, item.qty + 1)}>+</button>
                 </div>
-              );
-            })
+                <div>
+                  {formatPrice(item.price)} × {item.qty} = {formatPrice(item.price * item.qty)}
+                </div>
+                <button onClick={() => onRemove(index)} style={{ color: "red", border: "none", background: "none" }}>Remove</button>
+              </div>
+            ))
           )}
         </div>
 
-        {/* Footer */}
-        <footer className="basket-footer">
-          <div className="total">
-            <span>Total</span>
+        <footer style={{ padding: 20, borderTop: "1px solid #eee" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
+            <strong>Total:</strong>
             <strong>{formatPrice(total)}</strong>
           </div>
-
           <button
-            className="checkout-btn"
+            className="btn btn-warning w-100"
             disabled={items.length === 0}
             onClick={onCheckout}
           >

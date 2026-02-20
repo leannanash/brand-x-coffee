@@ -17,22 +17,47 @@ export default function MainLayout() {
     localStorage.setItem("basket", JSON.stringify(basketItems));
   }, [basketItems]);
 
-  const cartCount = basketItems.reduce((sum, item) => sum + (item.qty || 0), 0);
+  const cartCount = basketItems.reduce(
+    (sum, item) => sum + item.qty,
+    0
+  );
+
+  const handleAddToBasket = (newItem) => {
+    setBasketItems((prev) => {
+      const existingIndex = prev.findIndex(
+        (item) =>
+          item.id === newItem.id &&
+          item.size === newItem.size
+      );
+
+      if (existingIndex !== -1) {
+        const updated = [...prev];
+        updated[existingIndex].qty += newItem.qty;
+        return updated;
+      }
+
+      return [...prev, newItem];
+    });
+
+    setBasketOpen(true);
+  };
 
   const handleUpdateQty = (index, newQty) => {
-    setBasketItems((prev) => {
-      const copy = [...prev];
-      copy[index] = { ...copy[index], qty: newQty };
-      return copy;
-    });
+    setBasketItems((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, qty: newQty } : item
+      )
+    );
   };
 
   const handleRemove = (index) => {
-    setBasketItems((prev) => prev.filter((_, i) => i !== index));
+    setBasketItems((prev) =>
+      prev.filter((_, i) => i !== index)
+    );
   };
 
   const handleCheckout = () => {
-    alert("Checkout coming soon ☕🛒");
+    alert("Checkout coming soon ☕");
   };
 
   return (
@@ -43,9 +68,8 @@ export default function MainLayout() {
         onLoginClick={() => setLoginOpen(true)}
       />
 
-      {/* 👇 This renders Home / Shop / About / Contact */}
       <main>
-        <Outlet />
+        <Outlet context={{ handleAddToBasket }} />
       </main>
 
       <BasketSidebar
@@ -57,7 +81,10 @@ export default function MainLayout() {
         onCheckout={handleCheckout}
       />
 
-      <LoginModal show={loginOpen} onClose={() => setLoginOpen(false)} />
+      <LoginModal
+        show={loginOpen}
+        onClose={() => setLoginOpen(false)}
+      />
     </>
   );
 }
