@@ -1,58 +1,80 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-export default function AddToBasketModal({
-  open,
-  closing,
-  item,
-  qty,
-  size,
-  setQty,
-  setSize,
-  totalPrice,
-  onClose,
-  onAdd,
-}) {
+export default function AddToBasketModal({ open, closing, item, onClose, onAdd }) {
   if (!open || !item) return null;
 
-  // Determine available sizes
+  const imageSrc = item.image || item.image_url || "";
+
   const availableSizes = [];
-  if (item.price12oz) availableSizes.push({ label: "12oz", price: item.price12oz });
-  if (item.price16oz) availableSizes.push({ label: "16oz", price: item.price16oz });
-  if (item.pricesingle) availableSizes.push({ label: "Single", price: item.pricesingle });
+if (item.price12oz != null)
+  availableSizes.push({ label: "12oz", price: item.price12oz });
+if (item.price16oz != null)
+  availableSizes.push({ label: "16oz", price: item.price16oz });
+if (item.pricesingle != null)
+  availableSizes.push({ label: "Single", price: item.pricesingle });
+
+  const [qty, setQty] = useState(1);
+  const [size, setSize] = useState(
+    item.price12oz ? "12oz" : item.price16oz ? "16oz" : "Single"
+  );
+
+  useEffect(() => {
+    setQty(1);
+    setSize(item.price12oz ? "12oz" : item.price16oz ? "16oz" : "Single");
+  }, [item]);
+
+  useEffect(() => {
+  console.log("ITEM:", item);
+}, [item]);
+
+const getPrice = () => {
+  const map = {
+    "12oz": item.price12oz,
+    "16oz": item.price16oz,
+    "Single": item.pricesingle,
+  };
+  return Number(map[size]) || 0;
+};
+
+  const calcTotal = () => {
+    const price = getPrice();
+    return (price * qty).toFixed(2);
+  };
+
+  const handleAdd = () => {
+    const price = getPrice();
+
+    onAdd({
+      id: item.id,
+      name: item.title,
+      image: item.image || item.image_url,
+      size,
+      price,
+      qty,
+    });
+
+    onClose();
+  };
 
   return (
-    <div
-      className={`custom-modal-backdrop ${closing ? "closing" : "open"}`}
-      onClick={onClose}
-    >
-      <div
-        className={`custom-modal ${closing ? "closing" : "open"}`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Image Preview */}
-        {item.image_url && (
+    <div className={`custom-modal-backdrop ${closing ? "closing" : "open"}`} onClick={onClose}>
+      <div className={`custom-modal ${closing ? "closing" : "open"}`} onClick={(e) => e.stopPropagation()}>
+        {imageSrc && (
           <div className="modal-image-wrapper mb-3 text-center">
             <img
-              src={item.image_url}
+              src={imageSrc}
               alt={item.title}
-              className="modal-image"
-              style={{ maxHeight: 200, objectFit: "cover" }}
+              style={{ maxHeight: 220, width: "100%", objectFit: "cover", borderRadius: "10px" }}
             />
           </div>
         )}
 
-        {/* Product Title */}
         <h5 className="mb-3 text-center">{item.title}</h5>
 
-        {/* Size Selector */}
         {availableSizes.length > 0 && (
           <div className="mb-3">
             <label className="form-label fw-semibold">Size</label>
-            <select
-              className="form-select"
-              value={size}
-              onChange={(e) => setSize(e.target.value)}
-            >
+            <select className="form-select" value={size} onChange={(e) => setSize(e.target.value)}>
               {availableSizes.map((s) => (
                 <option key={s.label} value={s.label}>
                   {s.label} (₱{s.price})
@@ -62,42 +84,27 @@ export default function AddToBasketModal({
           </div>
         )}
 
-        {/* Quantity Selector */}
         <div className="mb-3">
           <label className="form-label fw-semibold">Quantity</label>
-          <div className="d-flex justify-content-center align-items-center gap-3">
-            <button
-              type="button"
-              className="btn btn-outline-secondary"
-              onClick={() => setQty((q) => Math.max(1, q - 1))}
-            >
+          <div className="d-flex justify-content-center gap-3">
+            <button className="btn btn-outline-secondary" onClick={() => setQty((q) => Math.max(1, q - 1))}>
               −
             </button>
             <span className="fw-bold fs-4">{qty}</span>
-            <button
-              type="button"
-              className="btn btn-outline-secondary"
-              onClick={() => setQty((q) => q + 1)}
-            >
+            <button className="btn btn-outline-secondary" onClick={() => setQty((q) => q + 1)}>
               +
             </button>
           </div>
         </div>
 
-        {/* Total Price */}
         <div className="price-box mb-4 text-center">
           <div className="text-muted">Total</div>
-          <div className="fs-4 fw-bold">₱{totalPrice}</div>
+          <div className="fs-4 fw-bold">₱{calcTotal()}</div>
         </div>
 
-        {/* Action Buttons */}
         <div className="d-flex justify-content-between gap-2">
-          <button className="btn btn-light w-50" onClick={onClose}>
-            Cancel
-          </button>
-          <button className="btn btn-warning w-50" onClick={onAdd}>
-            Add to Basket
-          </button>
+          <button className="btn btn-light w-50" onClick={onClose}>Cancel</button>
+          <button className="btn btn-warning w-50" onClick={handleAdd}>Add to Basket</button>
         </div>
       </div>
     </div>

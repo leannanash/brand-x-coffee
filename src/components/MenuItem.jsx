@@ -12,12 +12,18 @@ export default function MenuItem({
   pricesingle,
   featured,
 }) {
-  // Determine price display
-  const displayPrice = pricesingle
-    ? `₱${pricesingle}`
-    : price12oz
-    ? `12oz: ₱${price12oz} / 16oz: ₱${price16oz}`
-    : "";
+let displayPrice = "";
+
+if (pricesingle != null) {
+  displayPrice = `₱${pricesingle}`;
+} else {
+  const sizes = [];
+
+  if (price12oz != null) sizes.push(`12oz: ₱${price12oz}`);
+  if (price16oz != null) sizes.push(`16oz: ₱${price16oz}`);
+
+  displayPrice = sizes.join(" / ");
+}
 
   return (
     <div
@@ -29,23 +35,18 @@ export default function MenuItem({
         {image_url && (
           <img src={image_url} alt={title} className="card-img-top img-fluid" />
         )}
-
         {featured && (
           <span className="badge bg-warning text-dark position-absolute top-0 start-0 m-2">
             FEATURED
           </span>
         )}
-
-        {rating && (
-          <div className="star-rating position-absolute top-0 end-0 m-2">
+        {rating != null && (            
+         <div className="star-rating position-absolute top-0 end-0 m-2">
             {[...Array(5)].map((_, i) => (
               <i
                 key={i}
                 className="fas fa-star"
-                style={{
-                  color: i < rating ? "#ffc107" : "#e4e5e9",
-                  fontSize: "0.85rem",
-                }}
+                style={{ color: i < rating ? "#ffc107" : "#e4e5e9", fontSize: "0.85rem" }}
               />
             ))}
           </div>

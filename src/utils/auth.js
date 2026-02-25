@@ -83,3 +83,10 @@ export function logout() {
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("user");
 }
+
+const accessToken = localStorage.getItem("accessToken");
+if (accessToken) {
+  console.log("User is logged in");
+} else {
+  console.log("User is NOT logged in");
+}

@@ -11,7 +11,7 @@ import "./styles/index.css";
 import './styles/App.css';  
 import './styles/Banner.css';  
 import "./styles/Header.css";
-import "./styles/Footer.css"; // new stylesheet
+import "./styles/Footer.css"; 
 import "./styles/Home.css";
 import "./styles/HomeSection.css";
 import './styles/MenuItem.css';
@@ -23,6 +23,9 @@ import "./styles/AdminLayout.css";
 import "./styles/Dashboard.css"; 
 import "./styles/Shop.css"; 
 import "./styles/AddToBasketModal.css";
+import "./styles/CheckOutModal.css";
+import "./styles/ReceiptModal.css";
+
 
 
 
