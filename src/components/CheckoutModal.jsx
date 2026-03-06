@@ -5,11 +5,7 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
 
   const formatPrice = (amount) => `₱${amount.toFixed(2)}`;
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.price * item.qty,
-    0
-  );
-
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
   const taxRate = 0.12;
   const tax = subtotal * taxRate;
   const total = subtotal + tax;
@@ -27,18 +23,33 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
   };
 
   const handleSubmit = () => {
-    if (!form.fullName || !form.phone) {
+    if (!form.fullName.trim() || !form.phone.trim()) {
       alert("Please fill required fields.");
       return;
     }
 
-    onPlaceOrder({
-      customer: form,
-      items,
-      subtotal,
-      tax,
-      total,
-    });
+    if (!items || items.length === 0) {
+      alert("Your basket is empty!");
+      return;
+    }
+
+    // Prepare payload to match backend
+    const orderPayload = {
+      customerName: form.fullName.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim(),
+      address: form.address.trim(),
+      paymentMethod: form.paymentMethod,
+      items: items.map((item) => ({
+        id: item.id,
+        title: item.title, // matches DB column
+        size: item.size,
+        price: item.price,
+        qty: item.qty,
+      })),
+    };
+
+    onPlaceOrder(orderPayload);
 
     onClose();
   };
@@ -55,6 +66,7 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
             type="text"
             name="fullName"
             className="form-control"
+            value={form.fullName}
             onChange={handleChange}
           />
         </div>
@@ -65,6 +77,7 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
             type="email"
             name="email"
             className="form-control"
+            value={form.email}
             onChange={handleChange}
           />
         </div>
@@ -75,6 +88,7 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
             type="text"
             name="phone"
             className="form-control"
+            value={form.phone}
             onChange={handleChange}
           />
         </div>
@@ -84,6 +98,7 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
           <textarea
             name="address"
             className="form-control"
+            value={form.address}
             onChange={handleChange}
           />
         </div>
@@ -93,6 +108,7 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
           <select
             name="paymentMethod"
             className="form-select"
+            value={form.paymentMethod}
             onChange={handleChange}
           >
             <option>Cash</option>
@@ -104,11 +120,10 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
         {/* Order Summary */}
         <div className="order-summary mb-3">
           <h6>Order Summary</h6>
-
           {items.map((item, index) => (
             <div key={index} className="d-flex justify-content-between">
               <span>
-                {item.name} ({item.size}) × {item.qty}
+                {item.title} ({item.size}) × {item.qty}
               </span>
               <span>{formatPrice(item.price * item.qty)}</span>
             </div>

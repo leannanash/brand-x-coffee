@@ -46,7 +46,7 @@ const getPrice = () => {
 
     onAdd({
       id: item.id,
-      name: item.title,
+      title: item.title,
       image: item.image || item.image_url,
       size,
       price,

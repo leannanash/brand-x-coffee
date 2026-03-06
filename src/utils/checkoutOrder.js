@@ -1,12 +1,12 @@
 // src/utils/checkoutOrder.js
 import { apiFetch } from "./api";
 
-// Checkout order
-export async function checkoutOrder({ items }) {
+export async function checkoutOrder({ customerName, items }) {
   return apiFetch("/checkout", {
     method: "POST",
     body: JSON.stringify({
-      items: items.map(item => ({
+      customerName,
+      items: items.map((item) => ({
         id: item.id,
         title: item.name,
         size: item.size,

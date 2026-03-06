@@ -22,9 +22,9 @@ export default function BasketSideBar({ isOpen, items = [], onClose, onRemove, o
           ) : (
             items.map((item, index) => (
               <div className="basket-item" key={index}>
-                <img src={item.image} alt={item.name} />
+                <img src={item.image} alt={item.title} />
                 <div className="item-info">
-                  <h6>{item.name} ({item.size})</h6>
+                  <h6>{item.title} ({item.size})</h6>
                   <div className="d-flex align-items-center mb-2">
                     <button className="qty-btn" onClick={() => onUpdateQty(index, Math.max(1, item.qty - 1))}>−</button>
                     <span className="mx-2">{item.qty}</span>

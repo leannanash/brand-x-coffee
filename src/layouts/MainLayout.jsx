@@ -14,7 +14,7 @@ export default function MainLayout() {
   const [receiptOpen, setReceiptOpen] = useState(false);
   const [lastOrder, setLastOrder] = useState(null);
 
-  // Get logged-in user
+  // Logged in user
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const basketKey = user ? `basket_${user.id}` : "basket_guest";
 
@@ -24,20 +24,21 @@ export default function MainLayout() {
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Persist basket whenever it changes
+  // Persist basket
   useEffect(() => {
     localStorage.setItem(basketKey, JSON.stringify(basketItems));
   }, [basketItems, basketKey]);
 
-  // Cart count for header
+  // Header cart count
   const cartCount = basketItems.reduce((sum, item) => sum + (item.qty || 0), 0);
 
-  // Add item to basket
+  // Add to basket
   const addToBasket = (item) => {
     setBasketItems((prev) => {
       const existing = prev.find(
         (i) => i.id === item.id && i.size === item.size
       );
+
       if (existing) {
         return prev.map((i) =>
           i.id === item.id && i.size === item.size
@@ -45,14 +46,17 @@ export default function MainLayout() {
             : i
         );
       }
+
       return [...prev, item];
     });
+
     setBasketOpen(true);
   };
 
-  // Update quantity
+  // Update qty
   const handleUpdateQty = (index, newQty) => {
     if (newQty <= 0) return;
+
     setBasketItems((prev) => {
       const copy = [...prev];
       copy[index] = { ...copy[index], qty: newQty };
@@ -65,48 +69,48 @@ export default function MainLayout() {
     setBasketItems((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Open checkout modal
+  // Open checkout
   const handleCheckout = () => setCheckoutOpen(true);
 
   // Place order
-  const handlePlaceOrder = async ({ items }) => {
-    if (!items || items.length === 0) {
-      alert("Your basket is empty!");
-      return;
-    }
+const handlePlaceOrder = async ({ items }) => {
+  if (!items || items.length === 0) {
+    alert("Your basket is empty!");
+    return;
+  }
 
-    try {
-      // Send items to backend
-      const response = await checkoutOrder({ items });
+  try {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
 
-      // Prepare receipt
-      const subtotal = items.reduce((sum, i) => sum + i.price * i.qty, 0);
-      const tax = subtotal * 0.12;
-      const total = subtotal + tax;
-      const user = JSON.parse(localStorage.getItem("user")|| "null");
+    const response = await checkoutOrder({
+      customerName: user?.fullName || "Guest",
+      items,
+    });
 
-      setLastOrder({
-        id: response.orderId,
-        items,
-        subtotal,
-        tax,
-        total,
-        created_at: new Date(),
-        customer: user,
-      });
+    const subtotal = items.reduce((sum, i) => sum + i.price * i.qty, 0);
+    const tax = subtotal * 0.12;
+    const total = subtotal + tax;
 
-      // Clear basket for this user
-      setBasketItems([]);
-      setBasketOpen(false);
-      setCheckoutOpen(false);
-      setReceiptOpen(true);
+    setLastOrder({
+      id: response.orderId,
+      items,
+      subtotal,
+      tax,
+      total,
+      created_at: new Date(),
+      customer: user,
+    });
 
-      console.log("ORDER RESPONSE:", response);
-    } catch (err) {
-      console.error("Checkout error:", err);
-      alert("Failed to place order. Please try again.");
-    }
-  };
+    setBasketItems([]);
+    setBasketOpen(false);
+    setCheckoutOpen(false);
+    setReceiptOpen(true);
+
+  } catch (err) {
+    console.error("Checkout error:", err);
+    alert("Failed to place order");
+  }
+};
 
   return (
     <>
