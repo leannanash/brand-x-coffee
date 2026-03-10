@@ -1,65 +1,77 @@
 import React, { useState } from "react";
+import { checkoutOrder } from "../utils/checkoutOrder";
 
-export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
+export default function CheckoutModal({ open, items = [], onClose, onOrderSuccess }) {
   if (!open) return null;
-
-  const formatPrice = (amount) => `₱${amount.toFixed(2)}`;
-
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const taxRate = 0.12;
-  const tax = subtotal * taxRate;
-  const total = subtotal + tax;
 
   const [form, setForm] = useState({
     fullName: "",
     email: "",
     phone: "",
     address: "",
-    paymentMethod: "Cash",
   });
 
+  const [loading, setLoading] = useState(false);
+
+  const formatPrice = (amount) => `₱${Number(amount).toFixed(2)}`;
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.fullName.trim() || !form.phone.trim()) {
-      alert("Please fill required fields.");
-      return;
+      return alert("Please fill Name & Phone");
     }
 
-    if (!items || items.length === 0) {
-      alert("Your basket is empty!");
-      return;
+    if (!items.length) {
+      return alert("Your basket is empty");
     }
 
-    // Prepare payload to match backend
-    const orderPayload = {
-      customerName: form.fullName.trim(),
-      email: form.email.trim(),
+    const cleanItems = items.map((item) => ({
+      product_id: item.id,
+      size: item.size,
+      qty: Number(item.qty),
+    }));
+
+    const payload = {
+      customer_name: form.fullName.trim(),
       phone: form.phone.trim(),
-      address: form.address.trim(),
-      paymentMethod: form.paymentMethod,
-      items: items.map((item) => ({
-        id: item.id,
-        title: item.title, // matches DB column
-        size: item.size,
-        price: item.price,
-        qty: item.qty,
-      })),
+      email: form.email.trim() || null,
+      address: form.address.trim() || null,
+      items: cleanItems,
     };
 
-    onPlaceOrder(orderPayload);
+    try {
+      setLoading(true);
 
-    onClose();
+      const result = await checkoutOrder(payload);
+
+      if (onOrderSuccess) {
+        onOrderSuccess(result);
+      }
+
+      onClose();
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert(err.message || "Checkout failed");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const subtotal = items.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const tax = subtotal * 0.12;
+  const total = subtotal + tax;
 
   return (
     <div className="checkout-backdrop" onClick={onClose}>
       <div className="checkout-modal" onClick={(e) => e.stopPropagation()}>
         <h4 className="mb-3">Checkout</h4>
 
-        {/* Billing Form */}
         <div className="mb-3">
           <label>Full Name *</label>
           <input
@@ -68,6 +80,7 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
             className="form-control"
             value={form.fullName}
             onChange={handleChange}
+            disabled={loading}
           />
         </div>
 
@@ -79,6 +92,7 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
             className="form-control"
             value={form.email}
             onChange={handleChange}
+            disabled={loading}
           />
         </div>
 
@@ -90,6 +104,7 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
             className="form-control"
             value={form.phone}
             onChange={handleChange}
+            disabled={loading}
           />
         </div>
 
@@ -100,28 +115,15 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
             className="form-control"
             value={form.address}
             onChange={handleChange}
+            disabled={loading}
           />
         </div>
 
-        <div className="mb-4">
-          <label>Payment Method</label>
-          <select
-            name="paymentMethod"
-            className="form-select"
-            value={form.paymentMethod}
-            onChange={handleChange}
-          >
-            <option>Cash</option>
-            <option>GCash</option>
-            <option>Card</option>
-          </select>
-        </div>
-
-        {/* Order Summary */}
         <div className="order-summary mb-3">
           <h6>Order Summary</h6>
-          {items.map((item, index) => (
-            <div key={index} className="d-flex justify-content-between">
+
+          {items.map((item, i) => (
+            <div key={i} className="d-flex justify-content-between">
               <span>
                 {item.title} ({item.size}) × {item.qty}
               </span>
@@ -148,11 +150,20 @@ export default function CheckoutModal({ open, items, onClose, onPlaceOrder }) {
         </div>
 
         <div className="d-flex gap-2">
-          <button className="btn btn-light w-50" onClick={onClose}>
+          <button
+            className="btn btn-light w-50"
+            onClick={onClose}
+            disabled={loading}
+          >
             Cancel
           </button>
-          <button className="btn btn-warning w-50" onClick={handleSubmit}>
-            Place Order
+
+          <button
+            className="btn btn-warning w-50"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? "Placing..." : "Place Order"}
           </button>
         </div>
       </div>

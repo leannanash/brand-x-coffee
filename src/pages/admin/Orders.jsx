@@ -8,9 +8,23 @@ export default function Orders() {
   const fetchOrders = async () => {
     try {
       const data = await getOrders();
-      setOrders(data);
+
+      // Map backend fields to frontend-friendly keys if needed
+      const formatted = data.map((order) => ({
+        id: order.id,
+        customer_name: order.customer_name || "Guest",
+        phone: order.phone || "",
+        email: order.email || "",
+        address: order.address || "",
+        total_amount: Number(order.total_amount || 0),
+        status: order.status || "pending",
+        created_at: order.created_at,
+        items: order.items || [],
+      }));
+
+      setOrders(formatted);
     } catch (err) {
-      console.error(err);
+      console.error("Fetch Orders Error:", err);
       alert("Failed to fetch orders");
     } finally {
       setLoading(false);
@@ -24,14 +38,11 @@ export default function Orders() {
   const changeStatus = async (id, status) => {
     try {
       await updateOrderStatus(id, status);
-
       setOrders((prev) =>
-        prev.map((order) =>
-          order.id === id ? { ...order, status } : order
-        )
+        prev.map((order) => (order.id === id ? { ...order, status } : order))
       );
     } catch (err) {
-      console.error(err);
+      console.error("Update Status Error:", err);
       alert("Failed to update order status");
     }
   };
@@ -59,40 +70,53 @@ export default function Orders() {
           {orders.map((order) => (
             <tr key={order.id}>
               <td>#{order.id}</td>
-
               <td>
-                {order.customer_name || "Guest"}
+                {order.customer_name}
+                {order.phone && <div className="text-muted">📞 {order.phone}</div>}
+                {order.email && <div className="text-muted">✉️ {order.email}</div>}
+                {order.address && <div className="text-muted">🏠 {order.address}</div>}
               </td>
 
               <td>
-                {order.items?.map((i, index) => (
-                  <div key={index}>
-                    {i.title} ({i.size}) x{i.qty}
-                  </div>
-                ))}
+                {order.items.length > 0 ? (
+                  order.items.map((i, idx) => (
+                    <div key={idx}>
+                      {i.title} ({i.size}) × {i.qty}
+                    </div>
+                  ))
+                ) : (
+                  "No items"
+                )}
               </td>
 
-              <td>₱{order.total}</td>
+              <td>₱{order.total_amount.toFixed(2)}</td>
 
               <td>
-                <span className={`badge 
-                  ${order.status === "pending" ? "bg-secondary" :
-                    order.status === "preparing" ? "bg-warning" :
-                    order.status === "ready" ? "bg-info" :
-                    order.status === "completed" ? "bg-success" :
-                    "bg-danger"
-                  }`}>
+                <span
+                  className={`badge ${
+                    order.status === "pending"
+                      ? "bg-secondary"
+                      : order.status === "preparing"
+                      ? "bg-warning"
+                      : order.status === "ready"
+                      ? "bg-info"
+                      : order.status === "completed"
+                      ? "bg-success"
+                      : "bg-danger"
+                  }`}
+                >
                   {order.status}
                 </span>
               </td>
 
               <td>
-                {new Date(order.created_at).toLocaleString()}
+                {order.created_at
+                  ? new Date(order.created_at).toLocaleString()
+                  : "No Date"}
               </td>
 
               <td>
                 <div className="d-flex gap-2 flex-wrap">
-
                   <button
                     className="btn btn-sm btn-warning"
                     onClick={() => changeStatus(order.id, "preparing")}
@@ -113,7 +137,6 @@ export default function Orders() {
                   >
                     Complete
                   </button>
-
                 </div>
               </td>
             </tr>

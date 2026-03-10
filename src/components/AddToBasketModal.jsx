@@ -6,50 +6,42 @@ export default function AddToBasketModal({ open, closing, item, onClose, onAdd }
   const imageSrc = item.image || item.image_url || "";
 
   const availableSizes = [];
-if (item.price12oz != null)
-  availableSizes.push({ label: "12oz", price: item.price12oz });
-if (item.price16oz != null)
-  availableSizes.push({ label: "16oz", price: item.price16oz });
-if (item.pricesingle != null)
-  availableSizes.push({ label: "Single", price: item.pricesingle });
+  if (item.price12oz != null) availableSizes.push({ label: "12oz", price: Number(item.price12oz) });
+  if (item.price16oz != null) availableSizes.push({ label: "16oz", price: Number(item.price16oz) });
+  if (item.pricesingle != null) availableSizes.push({ label: "Single", price: Number(item.pricesingle) });
 
   const [qty, setQty] = useState(1);
-  const [size, setSize] = useState(
-    item.price12oz ? "12oz" : item.price16oz ? "16oz" : "Single"
-  );
+  const [size, setSize] = useState(availableSizes.length ? availableSizes[0].label : "");
 
   useEffect(() => {
     setQty(1);
-    setSize(item.price12oz ? "12oz" : item.price16oz ? "16oz" : "Single");
+    setSize(availableSizes.length ? availableSizes[0].label : "");
   }, [item]);
 
-  useEffect(() => {
-  console.log("ITEM:", item);
-}, [item]);
-
-const getPrice = () => {
-  const map = {
-    "12oz": item.price12oz,
-    "16oz": item.price16oz,
-    "Single": item.pricesingle,
+  const getPrice = () => {
+    const map = {
+      "12oz": Number(item.price12oz ?? 0),
+      "16oz": Number(item.price16oz ?? 0),
+      "Single": Number(item.pricesingle ?? 0),
+    };
+    return map[size] || 0;
   };
-  return Number(map[size]) || 0;
-};
 
-  const calcTotal = () => {
-    const price = getPrice();
-    return (price * qty).toFixed(2);
-  };
+  const calcTotal = () => (getPrice() * qty).toLocaleString("en-PH", { style: "currency", currency: "PHP" });
 
   const handleAdd = () => {
-    const price = getPrice();
+    if (!item || !item.id) {
+      console.error("Cannot add item: missing id", item);
+      alert("Item is missing ID. Cannot add to basket.");
+      return;
+    }
 
     onAdd({
       id: item.id,
       title: item.title,
       image: item.image || item.image_url,
       size,
-      price,
+      price: getPrice(),
       qty,
     });
 
@@ -61,11 +53,7 @@ const getPrice = () => {
       <div className={`custom-modal ${closing ? "closing" : "open"}`} onClick={(e) => e.stopPropagation()}>
         {imageSrc && (
           <div className="modal-image-wrapper mb-3 text-center">
-            <img
-              src={imageSrc}
-              alt={item.title}
-              style={{ maxHeight: 220, width: "100%", objectFit: "cover", borderRadius: "10px" }}
-            />
+            <img src={imageSrc} alt={item.title} style={{ maxHeight: 220, width: "100%", objectFit: "cover", borderRadius: "10px" }} />
           </div>
         )}
 
@@ -77,7 +65,7 @@ const getPrice = () => {
             <select className="form-select" value={size} onChange={(e) => setSize(e.target.value)}>
               {availableSizes.map((s) => (
                 <option key={s.label} value={s.label}>
-                  {s.label} (₱{s.price})
+                  {s.label} ({s.price.toLocaleString("en-PH", { style: "currency", currency: "PHP" })})
                 </option>
               ))}
             </select>
@@ -87,19 +75,15 @@ const getPrice = () => {
         <div className="mb-3">
           <label className="form-label fw-semibold">Quantity</label>
           <div className="d-flex justify-content-center gap-3">
-            <button className="btn btn-outline-secondary" onClick={() => setQty((q) => Math.max(1, q - 1))}>
-              −
-            </button>
+            <button className="btn btn-outline-secondary" onClick={() => setQty(q => Math.max(1, q - 1))}>−</button>
             <span className="fw-bold fs-4">{qty}</span>
-            <button className="btn btn-outline-secondary" onClick={() => setQty((q) => q + 1)}>
-              +
-            </button>
+            <button className="btn btn-outline-secondary" onClick={() => setQty(q => q + 1)}>+</button>
           </div>
         </div>
 
         <div className="price-box mb-4 text-center">
           <div className="text-muted">Total</div>
-          <div className="fs-4 fw-bold">₱{calcTotal()}</div>
+          <div className="fs-4 fw-bold">{calcTotal()}</div>
         </div>
 
         <div className="d-flex justify-content-between gap-2">
