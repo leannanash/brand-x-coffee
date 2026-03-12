@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"; 
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import BasketSideBar from "../components/BasketSideBar";
@@ -8,9 +8,6 @@ import ReceiptModal from "../components/ReceiptModal";
 import { checkoutOrder } from "../utils/checkoutOrder";
 
 export default function MainLayout() {
-  // ----------------------
-  // States
-  // ----------------------
   const [basketOpen, setBasketOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -18,9 +15,6 @@ export default function MainLayout() {
   const [lastOrder, setLastOrder] = useState(null);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
 
-  // ----------------------
-  // Basket (localStorage)
-  // ----------------------
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const basketKey = user ? `basket_${user.id}` : "basket_guest";
 
@@ -29,6 +23,7 @@ export default function MainLayout() {
     return saved ? JSON.parse(saved) : [];
   });
 
+  // Persist basket to localStorage
   useEffect(() => {
     localStorage.setItem(basketKey, JSON.stringify(basketItems));
   }, [basketItems, basketKey]);
@@ -69,24 +64,19 @@ export default function MainLayout() {
   const handleCheckout = () => setCheckoutOpen(true);
 
   // ----------------------
-  // Place Order
+  // Place Order (only once)
   // ----------------------
   const handlePlaceOrder = async ({ customer_name, phone, email, address, items }) => {
-    if (!items || !items.length) {
-      return alert("Your basket is empty!");
-    }
-    if (!customer_name || !phone) {
-      return alert("Name and phone are required!");
-    }
+    if (loadingCheckout) return; // prevent double submission
+    if (!items || !items.length) return alert("Your basket is empty!");
+    if (!customer_name || !phone) return alert("Name and phone are required!");
 
-    // Filter items with valid id only
     const safeItems = items.filter((i) => i.id);
     if (!safeItems.length) return alert("No valid items in basket!");
 
     try {
       setLoadingCheckout(true);
 
-      // Send to backend (total computed server-side)
       const payload = {
         customer_name,
         phone,
@@ -101,7 +91,6 @@ export default function MainLayout() {
 
       const response = await checkoutOrder(payload);
 
-      // Compute subtotal, tax, total locally for receipt
       const subtotal = safeItems.reduce((sum, i) => sum + i.price * i.qty, 0);
       const tax = subtotal * 0.12;
       const total = subtotal + tax;
@@ -115,9 +104,11 @@ export default function MainLayout() {
         created_at: new Date(),
         customer_name,
         phone,
+        email,
+        address,
       });
 
-      // Clear basket and modals
+      // Clear basket immediately to prevent double checkout
       setBasketItems([]);
       setBasketOpen(false);
       setCheckoutOpen(false);
@@ -157,14 +148,11 @@ export default function MainLayout() {
       <CheckoutModal
         open={checkoutOpen}
         items={basketItems}
+        loading={loadingCheckout}
         onClose={() => setCheckoutOpen(false)}
-        onOrderSuccess={(result) => handlePlaceOrder({
-          customer_name: result.customer_name,
-          phone: result.phone,
-          email: result.email,
-          address: result.address,
-          items: basketItems
-        })}
+        onOrderSuccess={(formData) =>
+          handlePlaceOrder({ ...formData, items: basketItems })
+        }
       />
 
       <ReceiptModal

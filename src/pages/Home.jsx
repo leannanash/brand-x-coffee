@@ -10,7 +10,7 @@ export default function Home() {
       <main className="home">
         <HomeSection />
          <div className="p-4" style={{ maxWidth: 600, margin: "0 auto" }}>
-          <h3 class="mb-4 text-center text-3xl font-serif text-amber-900 tracking-tight italic">
+          <h3 className="mb-4 text-center text-3xl font-serif text-amber-900 tracking-tight italic">
             Freshly Brewed, Just for You
           </h3>
           <StyledVideo

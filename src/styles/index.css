@@ -11,6 +11,10 @@ html, body {
   overflow-x: hidden; /* prevent horizontal scroll */
 }
 
+.page{
+  padding-top:110px;
+}
+
 
 .custom-modal-backdrop {
   position: fixed;
