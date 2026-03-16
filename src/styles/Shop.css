@@ -1,31 +1,210 @@
-/* Fade in/out */
-.fade-in {
-  opacity: 0;
-  animation: fadeIn 0.3s forwards;
-}
-.fade-out {
-  opacity: 1;
-  animation: fadeOut 0.3s forwards;
-}
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-@keyframes fadeOut {
-  to { opacity: 0; }
+/* ================= SHOP PAGE ================= */
+.shop-page {
+  font-family: 'Playfair Display', serif;
+  background-color: #fef9f3;
+  color: #2c2c2c;
+  margin: 0;       /* remove default body margins */
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* prevent horizontal scroll */
 }
 
-/* MenuItem hover */
+
+/* ================= HERO ================= */
+.shop-hero {
+  position: relative;
+  width: 100%;
+  min-height: 60vh;
+  background-image: url('../assets/imgs/coffee-hero.jpg');
+  background-size: cover;
+  background-position: center 35%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 3rem;
+  color: #fff;
+  overflow: hidden;
+}
+
+.shop-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(30,20,10,0.6), rgba(15,10,5,0.6));
+  z-index: 1;
+}
+
+.shop-hero h1,
+.shop-hero p {
+  position: relative;
+  z-index: 2;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.75);
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.shop-hero p {
+  margin-top: 1rem;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+}
+
+/* ================= CATEGORY BAR ================= */
+.category-bar {
+  background: #fff;
+  padding: 1rem 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  overflow-x: auto;
+}
+
+.category-bar .category-scroll {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  scrollbar-width: none;
+}
+
+.category-bar .category-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.category-bar .btn {
+  border-radius: 30px;
+  padding: 10px 24px;
+  font-weight: 600;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.category-bar .btn.active,
+.category-bar .btn:hover {
+  background-color: #b5895a;
+  color: #fff;
+  border-color: #b5895a;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* ================= MENU ITEMS ================= */
+.menu-section {
+  margin-bottom: 4rem;
+}
+
+.menu-section h3 {
+  font-size: clamp(1.8rem, 4vw, 2.2rem);
+  color: #8b5e3c;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.menu-section h5 {
+  font-size: 1.1rem;
+  color: #4b3621;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+/* Menu Card hover effect */
 .menu-card {
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+
 .menu-card:hover {
-  transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   cursor: pointer;
 }
+
 .card-img-top {
-  transition: transform 0.25s ease;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
 }
+
 .menu-card:hover .card-img-top {
   transform: scale(1.05);
+}
+
+/* ================= MODAL ================= */
+.custom-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.custom-modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.custom-modal-backdrop.closing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.custom-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  max-width: 450px;
+  transform: scale(0.9) translateY(10px);
+  opacity: 0;
+  transition: all 0.25s ease;
+}
+
+.custom-modal.open {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.custom-modal.closing {
+  transform: scale(0.9) translateY(10px);
+  opacity: 0;
+}
+
+.skeleton-card {
+  width: 100%;
+  height: 280px;
+  border-radius: 12px;
+  background: #eee;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { background-color: #eee; }
+  50% { background-color: #ddd; }
+  100% { background-color: #eee; }
+}
+
+/* ================= ANIMATION ================= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .shop-hero {
+    padding: 4rem 2rem;
+    align-items: center;
+    text-align: center;
+    min-height: 40vh;
+  }
+
+  .menu-section h3 {
+    font-size: 1.5rem;
+  }
 }

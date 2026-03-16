@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react"; 
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
+import { AnimatePresence } from "framer-motion";
 import BasketSideBar from "../components/BasketSideBar";
 import LoginModal from "../components/LoginModal";
 import CheckoutModal from "../components/CheckoutModal";
@@ -133,7 +135,9 @@ export default function MainLayout() {
       />
 
       <main>
-        <Outlet context={{ addToBasket }} />
+        <AnimatePresence mode ="wait">
+          <Outlet key={location.pathname} context={{ addToBasket }} />
+        </AnimatePresence>
       </main>
 
       <BasketSideBar
@@ -164,6 +168,9 @@ export default function MainLayout() {
       <LoginModal
         show={loginOpen}
         onClose={() => setLoginOpen(false)}
+      />
+      <Footer
+       
       />
     </>
   );
