@@ -1,3 +1,9 @@
+
+
+/* Align brand more to the left but still with some breathing space */
+.navbar-brand {
+  margin-right: auto; /* pushes nav links and icons slightly right */
+}
 /* ===================== NAVBAR ===================== */
 .navbar {
   width: 100%;
@@ -5,28 +11,28 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 2rem;
-  background-color: #1c1c1c; /* darker for premium feel */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background-color: #1c1c1c; /* premium dark */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); /* smoother shadow */
   font-family: 'Poppins', sans-serif;
   position: fixed;
   top: 0;
   z-index: 999;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
 }
 
 /* ===================== BRAND ===================== */
 .navbar-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px; /* slightly larger gap */
   text-decoration: none;
   padding: 0.4rem 0.6rem;
   border-radius: 0.75rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .navbar-brand:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
 }
 
 .navbar-brand .logo {
@@ -35,17 +41,18 @@
   border-radius: 50%;
   border: 2px solid #d4a373;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .navbar-brand .logo:hover {
-  transform: scale(1.1);
+  transform: scale(1.12);
+  box-shadow: 0 4px 12px rgba(212,163,115,0.4);
 }
 
 .navbar-brand .brand {
   font-weight: 700;
   font-family: 'Playfair Display', serif;
   color: #f5c06f;
-  font-size: 1.6rem;
+  font-size: 1.65rem;
   letter-spacing: 1px;
 }
 
@@ -53,17 +60,17 @@
 .navbar-nav {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 2.25rem;
   flex-grow: 1;
   justify-content: center;
-  transition: max-height 0.3s ease;
+  transition: max-height 0.4s ease;
   flex-direction: row;
 }
 .navbar-nav .nav-link {
   color: #eee;
   font-weight: 500;
   padding: 0.5rem 0.75rem;
-  border-radius: 8px;
+  border-radius: 10px;
   position: relative;
   transition: all 0.3s ease;
 }
@@ -81,12 +88,12 @@
 }
 .navbar-nav .nav-link.active::after,
 .navbar-nav .nav-link:hover::after {
-  width: 50%;
+  width: 60%; /* slightly longer underline */
 }
 .navbar-nav .nav-link.active,
 .navbar-nav .nav-link:hover {
   color: #f5c06f;
-  background-color: rgba(245,192,111,0.1);
+  background-color: rgba(245,192,111,0.12);
   transform: translateY(-2px);
 }
 
@@ -94,7 +101,7 @@
 .navbar-icons {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .icon-btn {
@@ -102,13 +109,13 @@
   border: none;
   color: #eee;
   cursor: pointer;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   border-radius: 50%;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
   position: relative;
 }
 .icon-btn:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
   color: #f5c06f;
 }
 .cart-badge {
@@ -129,9 +136,9 @@
   top: 120%;
   right: 0;
   background-color: #2a2a2a;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  min-width: 180px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  min-width: 200px;
   z-index: 1000;
   padding: 0.5rem 0;
   transition: all 0.3s ease;
@@ -145,7 +152,7 @@
   transition: background 0.25s ease;
 }
 .account-dropdown .dropdown-item:hover {
-  background: rgba(245,192,111,0.1);
+  background: rgba(245,192,111,0.12);
 }
 .dropdown-user {
   display: flex;
@@ -158,8 +165,8 @@
   background: #f5c06f;
   color: #222;
   font-weight: 700;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -178,13 +185,19 @@
 
 /* Mobile toggle */
 .navbar-toggler {
+  display: none; /* hide by default */
   border: none;
   background: none;
   color: #eee;
   cursor: pointer;
 }
+
 .navbar-toggler i {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
+  transition: transform 0.3s ease;
+}
+.navbar-toggler:hover i {
+  transform: rotate(15deg) scale(1.1);
 }
 
 /* ===================== MOBILE RESPONSIVE ===================== */
@@ -195,15 +208,15 @@
     max-height: 0;
     overflow: hidden;
     background-color: rgba(28,28,28,0.95);
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    transition: max-height 0.3s ease;
+    transition: max-height 0.4s ease;
   }
   .navbar-nav.show {
-    max-height: 1000px;
+    max-height: 1200px;
   }
   .navbar-nav .nav-link {
     width: 100%;
@@ -222,14 +235,17 @@
 
 /* Small screens */
 @media (max-width: 576px) {
+  .navbar-toggler {
+    display: block;
+  }
   .navbar-brand .brand {
-    font-size: 1.3rem;
+    font-size: 1.35rem;
   }
   .navbar-brand .logo {
-    height: 42px;
-    width: 42px;
+    height: 44px;
+    width: 44px;
   }
   .navbar-nav .nav-link {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 }

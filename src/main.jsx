@@ -16,7 +16,6 @@ import "leaflet/dist/leaflet.css";
 
 // your styles next
 import "./styles/index.css";
-import "./styles/Banner.css";  
 import "./styles/Header.css";
 import "./styles/Footer.css"; 
 import "./styles/Home.css";

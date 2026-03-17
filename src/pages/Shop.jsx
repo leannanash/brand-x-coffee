@@ -4,6 +4,7 @@ import MenuItem from "../components/MenuItem";
 import AddToBasketModal from "../components/AddToBasketModal";
 import ScrollableBanner from "../components/reusable/ScrollableBanner";
 import { getProducts } from "../utils/products";
+import { fetchImg } from "../utils/fetchImg";
 
 const splitFeatured = (items, featuredCount = 2) => ({
   featured: items.slice(0, featuredCount),
@@ -20,16 +21,15 @@ export default function Shop() {
   const [modalClosing, setModalClosing] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  // Optional: fetch hero image dynamically if you store in Cloudinary
-  const [heroImage, setHeroImage] = useState("/assets/imgs/coffee-hero.jpg");
+  const [heroImage] = useState(
+    "https://res.cloudinary.com/dro6vrldb/image/upload/v1773746685/25_e33x8y.jpg"
+  );
 
   useEffect(() => {
     const fetchMenu = async () => {
       try {
         const data = await getProducts();
         setMenuItems(data || []);
-        // Example: use first product image as hero
-        if (data.length > 0) setHeroImage(data[0].image_url);
       } catch (err) {
         console.error(err);
         alert("Failed to fetch products");
@@ -59,9 +59,18 @@ export default function Shop() {
     closeModal();
   };
 
-  const allCategories = [...new Set(menuItems.map((item) => item.category))];
+  const allCategories = ["ALL", ...new Set(menuItems.map((item) => item.category))];
   const categoriesToRender =
-    activeCategory === "ALL" ? allCategories : [activeCategory];
+    activeCategory === "ALL"
+      ? allCategories.filter((c) => c !== "ALL")
+      : [activeCategory];
+
+  const heroImageUrl = fetchImg(heroImage, {
+    width: 1200,
+    height: 500,
+    crop: "fill",
+    quality: "auto",
+  });
 
   return (
     <section className="shop-page">
@@ -69,21 +78,13 @@ export default function Shop() {
       <ScrollableBanner
         title="Discover Our Menu"
         subtitle="Freshly brewed, handcrafted drinks and treats just for you."
-        backgroundImage={heroImage}
+        backgroundImage={heroImageUrl}
       />
 
       {/* CATEGORY SCROLLER */}
       <div className="category-bar py-3 mb-5">
         <div className="container text-center">
-          <div className="d-inline-flex flex-wrap gap-3 justify-content-center">
-            <button
-              className={`btn btn-outline-warning ${
-                activeCategory === "ALL" ? "active" : ""
-              }`}
-              onClick={() => setActiveCategory("ALL")}
-            >
-              All
-            </button>
+          <div className="d-flex flex-wrap justify-content-center gap-2">
             {allCategories.map((cat) => (
               <button
                 key={cat}
@@ -99,7 +100,7 @@ export default function Shop() {
         </div>
       </div>
 
-      {/* MENU */}
+      {/* MENU ITEMS */}
       <div className="container" style={{ maxWidth: "1400px" }}>
         {categoriesToRender.map((cat) => {
           const items = menuItems.filter((item) => item.category === cat);
@@ -113,28 +114,24 @@ export default function Shop() {
                 {cat}
               </h2>
 
-              {/* FEATURED ITEMS */}
+              {/* Featured items */}
               <div className="row justify-content-center g-4 mb-4">
                 {loading
                   ? Array(3)
                       .fill(0)
                       .map((_, i) => (
-                        <div key={i} className="col-lg-4 col-md-6">
+                        <div key={i} className="col-12 col-sm-6 col-md-4 col-lg-4">
                           <div className="skeleton-card" />
                         </div>
                       ))
                   : featured.map((item) => (
-                      <div key={item.id} className="col-lg-4 col-md-6">
-                        <MenuItem
-                          {...item}
-                          onOpenModal={() => openModal(item)}
-                          featured
-                        />
+                      <div key={item.id} className="col-12 col-sm-6 col-md-4 col-lg-4">
+                        <MenuItem {...item} onOpenModal={() => openModal(item)} featured />
                       </div>
                     ))}
               </div>
 
-              {/* OTHER ITEMS */}
+              {/* Other items */}
               {!loading && others.length > 0 && (
                 <>
                   <h5 className="text-center text-secondary mb-3 animate-fadeInUp">
@@ -144,7 +141,7 @@ export default function Shop() {
                     {others.map((item) => (
                       <div
                         key={item.id}
-                        className="col-lg-3 col-md-4 col-sm-6"
+                        className="col-6 col-sm-4 col-md-3 col-lg-3"
                       >
                         <MenuItem {...item} onOpenModal={() => openModal(item)} />
                       </div>
