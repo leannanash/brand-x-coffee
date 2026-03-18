@@ -4,12 +4,15 @@ import ScrollableBanner from "../components/reusable/ScrollableBanner";
 export default function Contact() {
   return (
     <section className="contact-page">
-      {/* HERO BANNER */}
-      <ScrollableBanner
-        title="Contact Us"
-        subtitle="Questions, feedback, or orders? Reach out anytime and we'll get back to you quickly."
-        backgroundImage="https://res.cloudinary.com/dro6vrldb/image/upload/v1773746685/25_e33x8y.jpg"
-      />
+
+      {/* HERO BANNER FULL WIDTH */}
+      <div className="container-fluid p-0">
+        <ScrollableBanner
+          title="Contact Us"
+          subtitle="Questions, feedback, or orders? Reach out anytime and we'll get back to you quickly."
+          backgroundImage="https://res.cloudinary.com/dro6vrldb/image/upload/v1773746685/25_e33x8y.jpg"
+        />
+      </div>
 
       {/* CONTACT INFO CARDS */}
       <div className="container my-5">
@@ -43,27 +46,15 @@ export default function Contact() {
       <div className="container my-5">
         <div className="row justify-content-center">
           <div className="col-lg-6">
-            <form className="contact-form animate-fadeInUp shadow-sm p-4 rounded bg-dark text-white">
+            <form className="contact-form animate-fadeInUp shadow-sm p-4 rounded bg-light text-black">
               <div className="mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Your Name"
-                />
+                <input type="text" className="form-control" placeholder="Your Name" />
               </div>
               <div className="mb-3">
-                <input
-                  type="email"
-                  className="form-control"
-                  placeholder="Your Email"
-                />
+                <input type="email" className="form-control" placeholder="Your Email" />
               </div>
               <div className="mb-3">
-                <textarea
-                  className="form-control"
-                  rows="5"
-                  placeholder="Your Message"
-                ></textarea>
+                <textarea className="form-control" rows="5" placeholder="Your Message"></textarea>
               </div>
               <button type="submit" className="btn btn-gradient w-100">
                 Send Message
@@ -83,10 +74,10 @@ export default function Contact() {
             height="450"
             style={{ border: 0 }}
             loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
       </div>
+
     </section>
   );
 }

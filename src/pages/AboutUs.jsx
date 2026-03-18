@@ -4,74 +4,59 @@ import bannerImage from '../assets/imgs/banner2.jpg';
 
 export default function AboutUs() {
   return (
-    <>
-      <ScrollableBanner
-        title="About Brand X Coffee"
-        subtitle="Passionate about quality brews and community"
-        backgroundImage={bannerImage}
-      />
+    <section className="about-page">
 
-      <main
-        style={{
-          maxWidth: '900px',
-          margin: '60px auto',
-          padding: '0 20px',
-          color: '#4b3621', // deep coffee brown
-          lineHeight: '1.8',
-          fontSize: '18px',
-          textAlign: 'center',
-          fontFamily: "'Playfair Display', serif",
-        }}
-      >
-        <h2
-          style={{
-            fontSize: '2.5rem',
-            marginBottom: '30px',
-            color: '#b5895a', // latte highlight
-          }}
-        >
-          Welcome to Brand X Coffee
-        </h2>
+      {/* FULL WIDTH BANNER */}
+      <div className="container-fluid p-0">
+        <ScrollableBanner
+          title="About Brand X Coffee"
+          subtitle="Passionate about quality brews and community"
+          backgroundImage={bannerImage}
+        />
+      </div>
 
-        <p
-          style={{
-            backgroundColor: '#fdf6ec',
-            padding: '20px',
-            borderRadius: '12px',
-            marginBottom: '25px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          }}
-        >
-          We are passionate about bringing you the finest coffee blends sourced
-          from around the world. Our mission is to provide a cozy and welcoming
-          place where coffee lovers can enjoy great brews and delicious snacks.
-        </p>
+      {/* CONTENT */}
+      <div className="container my-5">
+        <div className="row justify-content-center">
+          <div className="col-lg-8 text-center">
 
-        <p
-          style={{
-            backgroundColor: '#fdf6ec',
-            padding: '20px',
-            borderRadius: '12px',
-            marginBottom: '25px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          }}
-        >
-          Founded in 2010, Brand X Coffee has grown into a community favorite,
-          focusing on quality, sustainability, and excellent customer service.
-          We believe that every cup of coffee should tell a story.
-        </p>
+            <h2
+              style={{
+                fontSize: '2.5rem',
+                marginBottom: '30px',
+                color: '#b5895a',
+                fontFamily: "'Playfair Display', serif",
+              }}
+            >
+              Welcome to Brand X Coffee
+            </h2>
 
-        <p
-          style={{
-            backgroundColor: '#fdf6ec',
-            padding: '20px',
-            borderRadius: '12px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          }}
-        >
-          Come visit us and experience the perfect coffee moment!
-        </p>
-      </main>
-    </>
+            <div className="mb-4 p-4 rounded shadow-sm" style={{ backgroundColor: '#fdf6ec' }}>
+              <p style={{ margin: 0, lineHeight: '1.8', fontSize: '18px', color: '#4b3621' }}>
+                We are passionate about bringing you the finest coffee blends sourced
+                from around the world. Our mission is to provide a cozy and welcoming
+                place where coffee lovers can enjoy great brews and delicious snacks.
+              </p>
+            </div>
+
+            <div className="mb-4 p-4 rounded shadow-sm" style={{ backgroundColor: '#fdf6ec' }}>
+              <p style={{ margin: 0, lineHeight: '1.8', fontSize: '18px', color: '#4b3621' }}>
+                Founded in 2010, Brand X Coffee has grown into a community favorite,
+                focusing on quality, sustainability, and excellent customer service.
+                We believe that every cup of coffee should tell a story.
+              </p>
+            </div>
+
+            <div className="p-4 rounded shadow-sm" style={{ backgroundColor: '#fdf6ec' }}>
+              <p style={{ margin: 0, lineHeight: '1.8', fontSize: '18px', color: '#4b3621' }}>
+                Come visit us and experience the perfect coffee moment!
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </section>
   );
 }

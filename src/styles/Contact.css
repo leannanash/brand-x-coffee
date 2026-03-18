@@ -3,21 +3,9 @@
   background-color: #fef9f3;
   color: #2c2c2c;
   padding-bottom: 60px;
+
 }
 
-/* HERO */
-
-.contact-hero {
-  position: relative;
-  background-image: url('../assets/imgs/contact-hero.jpg');
-  background-size: cover;
-  background-position: center;
-  height: 52vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 3rem;
-}
 
 .contact-overlay {
   position: absolute;
@@ -131,6 +119,11 @@
   transform: scale(1.015);
 }
 
+
+.scrollable-banner {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+}
 /* ANIMATION */
 
 .animate-fadeInUp {

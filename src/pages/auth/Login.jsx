@@ -14,10 +14,13 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // Call auth.js login function (handles saving access + refresh tokens)
+      // Call auth.js login function (handles tokens)
       const result = await apiLogin(data.email, data.password);
 
-      // Redirect based on user role
+      // Save user to localStorage for Header
+      localStorage.setItem("user", JSON.stringify(result.user));
+
+      // Redirect based on role
       if (result.user.role === "admin") navigate("/admin");
       else navigate("/shop");
     } catch (err) {

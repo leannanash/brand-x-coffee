@@ -21,7 +21,6 @@ import Profile from "./pages/Profile";
 export default function App() {
   return (
     <Routes>
-
       {/* Public site */}
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
@@ -47,12 +46,13 @@ export default function App() {
       </Route>
 
       {/* Admin dashboard */}
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="products" element={<Products />} />
-        <Route path="orders" element={<Orders />} />
+      <Route path="/admin" element={<ProtectedRoute role="admin" />}>
+        <Route element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="products" element={<Products />} />
+          <Route path="orders" element={<Orders />} />
+        </Route>
       </Route>
-
     </Routes>
   );
 }

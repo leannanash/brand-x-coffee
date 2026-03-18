@@ -12,17 +12,20 @@ export default function ScrollableBanner({ title, subtitle, backgroundImage }) {
   // Cap parallax offset to prevent overflow
   const parallaxOffset = Math.min(offsetY * 0.5, 200);
 
-  const sectionStyle = {
-    position: 'relative',
-    height: '80vh',
-    minHeight: '500px',
-    width: '100%',
-    overflow: 'hidden', // prevents internal overflow
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#fff',
-  };
+const sectionStyle = {
+  position: 'relative',
+  height: '80vh',
+  minHeight: '500px',
+
+  width: '100vw',
+  marginLeft: 'calc(-50vw + 50%)',
+
+  overflow: 'hidden',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#fff',
+};
 
   const backgroundStyle = {
     position: 'absolute',

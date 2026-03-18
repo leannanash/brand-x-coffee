@@ -1,26 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { getOrders } from "../utils/orders";
 
-export default function Profile() {
-  const [user, setUser] = useState(null);
+export default function Profile({ user: parentUser }) {
+  const [user, setUser] = useState(parentUser || null);
   const [orders, setOrders] = useState([]);
-  const [loadingOrders, setLoadingOrders] = useState(true);
-  const [expandedOrders, setExpandedOrders] = useState({}); // track expanded state
+  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [expandedOrders, setExpandedOrders] = useState({});
 
-  // Load user from localStorage
+  // Listen for login/logout across tabs
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    const handleStorage = () => {
+      const stored = localStorage.getItem("user");
+      setUser(stored && stored !== "undefined" && stored !== "null" ? JSON.parse(stored) : null);
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   // Fetch user's orders
   useEffect(() => {
     const fetchOrders = async () => {
       if (!user) return;
+      setLoadingOrders(true);
       try {
         const data = await getOrders();
         const userOrders = data.filter(
-          (o) => o.email === user.email || o.customer_name === user.name
+          (o) =>
+            (o.email || "").toLowerCase() === (user.email || "").toLowerCase() ||
+            (o.customer_name || "").toLowerCase() === (user.name || "").toLowerCase()
         );
         const formatted = userOrders.map((order) => ({
           id: order.id,
@@ -57,7 +64,6 @@ export default function Profile() {
     <div className="profile-container">
       <div className="profile-card">
         <div className="profile-avatar">{initial}</div>
-
         <h2 className="profile-name">{user.name}</h2>
         <p className="profile-email">{user.email}</p>
 
@@ -76,9 +82,10 @@ export default function Profile() {
           </div>
         </div>
 
-        <button className="profile-btn">Edit Profile</button>
+        <button className="profile-btn" onClick={() => alert("Edit profile coming soon!")}>
+          Edit Profile
+        </button>
 
-        {/* ================= USER ORDER HISTORY ================= */}
         <div className="profile-orders">
           <h3>Order History</h3>
           {loadingOrders ? (

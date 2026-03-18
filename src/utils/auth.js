@@ -42,15 +42,17 @@ export async function getMe() {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
-  // If access token expired, try refreshing
   if (res.status === 401) {
     const success = await refreshAccessToken();
     if (!success) throw new Error("Not authenticated");
-    return getMe(); // retry with new access token
+    return getMe();
   }
 
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || "Failed to fetch user");
+
+  // 🔥 IMPORTANT: keep user fresh
+  localStorage.setItem("user", JSON.stringify(data.user));
 
   return data;
 }
@@ -84,9 +86,6 @@ export function logout() {
   localStorage.removeItem("user");
 }
 
-const accessToken = localStorage.getItem("accessToken");
-if (accessToken) {
-  console.log("User is logged in");
-} else {
-  console.log("User is NOT logged in");
+export function isAuthenticated() {
+  return !!localStorage.getItem("accessToken");
 }
