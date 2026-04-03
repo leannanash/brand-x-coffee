@@ -2,33 +2,31 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthMotionWrapper from "./AuthMotionWrapper";
 import LoginForm from "../../components/reusable/LoginForm";
-import { login as apiLogin } from "../../utils/auth"; // use new auth.js
+import { login as apiLogin } from "../../utils/auth"; 
+import { useOutletContext } from "react-router-dom";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (data) => {
-    setError("");
-    setLoading(true);
+ const handleLogin = async (data) => {
+  setError("");
+  setLoading(true);
 
-    try {
-      // Call auth.js login function (handles tokens)
-      const result = await apiLogin(data.email, data.password);
+  try {
+    const result = await apiLogin(data.email, data.password);
 
-      // Save user to localStorage for Header
-      localStorage.setItem("user", JSON.stringify(result.user));
+    // 🔥 Force reload so MainLayout picks up user
+    window.location.href =
+      result.user.role === "admin" ? "/admin" : "/shop";
 
-      // Redirect based on role
-      if (result.user.role === "admin") navigate("/admin");
-      else navigate("/shop");
-    } catch (err) {
-      setError(err.message || "Invalid email or password.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (err) {
+    setError(err.message || "Invalid email or password.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleGoogleLogin = () => {
     alert("Google Sign-In coming soon 🚀");

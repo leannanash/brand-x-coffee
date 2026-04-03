@@ -163,6 +163,60 @@
   padding-left: 20px;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+/* Base button */
+.page-btn,
+.page-number {
+  border: 1px solid #d4a373;
+  background: #fff7f0;
+  color: #5c3a21;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+/* Hover effect */
+.page-btn:hover,
+.page-number:hover {
+  background: #d4a373;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Active page */
+.page-number.active {
+  background: #8b5e3c;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(139, 94, 60, 0.3);
+}
+
+/* Disabled */
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: #f5e6d8;
+  color: #999;
+  border-color: #e0c3a3;
+}
+
+/* Optional: smoother feel */
+.page-number:active,
+.page-btn:active {
+  transform: scale(0.95);
+}
+
 @media (max-width: 768px) {
   .profile-card { max-width: 90%; padding: 25px; }
   .orders-table th, .orders-table td { padding: 8px 10px; font-size: 0.85rem; }

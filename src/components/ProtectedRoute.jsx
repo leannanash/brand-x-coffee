@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getMe } from "../utils/auth";
 
@@ -10,7 +10,7 @@ export default function ProtectedRoute({ children, role }) {
     const checkAuth = async () => {
       try {
         const data = await getMe();
-        setUser(data.user);
+        setUser(data);
       } catch {
         setUser(null);
       } finally {
@@ -23,12 +23,14 @@ export default function ProtectedRoute({ children, role }) {
 
   if (loading) return <div>Loading...</div>;
 
+  // ❌ Not logged in
   if (!user) return <Navigate to="/login" replace />;
 
-  // ✅ Case-insensitive role check
+  // ❌ Wrong role
   if (role && user.role?.toLowerCase() !== role.toLowerCase()) {
     return <Navigate to="/" replace />;
   }
 
-  return children;
+  // ✅ KEY FIX: support both patterns
+  return children ? children : <Outlet />;
 }

@@ -150,7 +150,7 @@ export default function MainLayout() {
 
       <main>
         <AnimatePresence mode="wait">
-          <Outlet key={location.pathname} context={{ addToBasket }} />
+          <Outlet key={location.pathname} context={{ addToBasket, user, setUser }} />
         </AnimatePresence>
       </main>
 

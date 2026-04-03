@@ -62,7 +62,7 @@ export async function refreshAccessToken() {
   const refreshToken = localStorage.getItem("refreshToken");
   if (!refreshToken) return false;
 
-  const res = await fetch(`${API_URL}/refresh-token`, {
+  const res = await fetch(`${API_URL}/refresh`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ refreshToken }),

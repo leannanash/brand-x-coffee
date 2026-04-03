@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 export default function HomeSection() {
+  const navigate = useNavigate();
   return (
     <section
       id="home-section"
@@ -90,6 +92,7 @@ export default function HomeSection() {
             fontWeight: '600',
             fontSize: '1rem',
           }}
+          onClick={() => navigate("/shop")}
         >
           Shop Now
         </button>
