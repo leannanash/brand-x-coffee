@@ -1,78 +1,64 @@
+/* ── Page ───────────────────────────────── */
 .contact-page {
   font-family: 'Playfair Display', serif;
-  background-color: #fef9f3;
+  background-color: #fdf6ec;
   color: #2c2c2c;
-  padding-bottom: 60px;
-
 }
 
-
-.contact-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    rgba(30,20,10,0.7),
-    rgba(30,20,10,0.4)
-  );
-  backdrop-filter: blur(2px);
-}
-
-.contact-title {
-  font-size: clamp(2.2rem, 5vw, 3.2rem);
-  font-weight: 700;
-  color: #ffd27f;
-  letter-spacing: 1px;
-}
-
-.contact-subtitle {
-  font-size: clamp(1rem, 2.5vw, 1.3rem);
-  color: #fff1da;
-  margin-top: 8px;
-}
-
-/* CARDS */
-
+/* ── Cards ─────────────────────────────── */
 .contact-card {
-  background: #fffaf3;
-  padding: 2rem 1.5rem;
+  background: #fff;
+  padding: 1.8rem 1.5rem;
   border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-  text-align: center;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
   transition: all 0.3s ease;
 }
 
 .contact-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 18px 45px rgba(0,0,0,0.22);
+  box-shadow: 0 14px 35px rgba(0,0,0,0.15);
 }
 
 .contact-card h5 {
   color: #b5895a;
-  font-weight: 700;
-  margin-bottom: 10px;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
 .contact-card p {
   margin: 0;
+  color: #5a4633;
 }
 
 .contact-card a {
   color: #8c6239;
-  text-decoration: none;
   font-weight: 600;
+  text-decoration: none;
 }
 
 .contact-card a:hover {
   color: #b5895a;
 }
 
-/* FORM */
-
+/* ── Form ─────────────────────────────── */
 .contact-form {
-  background: #fffaf3;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(6px);
   padding: 2rem;
-  border-radius: 18px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  height: 100%;
+}
+
+.contact-form h4 {
+  color: #3e2c1c;
+  font-weight: 700;
+}
+
+.contact-form .form-label {
+  font-size: 0.9rem;
+  color: #6b4f3a;
+  margin-bottom: 4px;
 }
 
 .contact-form .form-control {
@@ -87,45 +73,37 @@
   box-shadow: 0 0 8px rgba(181,137,90,0.3);
 }
 
-/* BUTTON */
-
-.btn-gradient {
-  background: linear-gradient(135deg,#b5895a,#d4a373);
-  color: white;
-  font-weight: 600;
-  border-radius: 40px;
-  padding: 12px 0;
+/* ── Button (match About) ─────────────── */
+.contact-btn {
+  background: linear-gradient(135deg, #b5895a, #9c6f45);
+  color: #fff;
+  padding: 12px;
+  border-radius: 30px;
   border: none;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
-.btn-gradient:hover {
-  background: linear-gradient(135deg,#8c6239,#b5895a);
+.contact-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
 }
 
-/* MAP */
-
+/* ── Map ─────────────────────────────── */
 .map-container {
-  border-radius: 18px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.22);
-  transition: transform 0.35s ease;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  height: 100%;
+  min-height: 400px;
+  transition: transform 0.3s ease;
 }
 
 .map-container:hover {
-  transform: scale(1.015);
+  transform: scale(1.01);
 }
 
-
-.scrollable-banner {
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-}
-/* ANIMATION */
-
+/* ── Animation ───────────────────────── */
 .animate-fadeInUp {
   opacity: 0;
   transform: translateY(20px);
@@ -143,16 +121,14 @@
   }
 }
 
-/* RESPONSIVE */
+/* ── Mobile ─────────────────────────── */
+@media (max-width: 768px) {
 
-@media (max-width:992px) {
-
-  .contact-hero {
-    height: 36vh;
+  .contact-form {
+    padding: 1.5rem;
   }
 
-  .contact-card {
-    padding:1.5rem 1rem;
+  .map-container {
+    min-height: 300px;
   }
-
 }

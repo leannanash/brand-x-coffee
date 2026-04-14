@@ -28,6 +28,7 @@ import "./styles/AuthLayout.css";
 import "./styles/AdminLayout.css"; 
 import "./styles/Dashboard.css"; 
 import "./styles/Shop.css"; 
+import "./styles/AboutUs.css"; 
 import "./styles/AddToBasketModal.css";
 import "./styles/CheckOutModal.css";
 import "./styles/ReceiptModal.css";

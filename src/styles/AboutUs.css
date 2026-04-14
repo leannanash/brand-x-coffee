@@ -1,0 +1,221 @@
+/* ── Page ───────────────────────────────────────────────── */
+.about-page {
+  font-family: 'Playfair Display', serif;
+  background-color: #fdf6ec;
+}
+
+.about-page .container {
+  max-width: 1100px;
+}
+
+/* ── Section Heading ────────────────────────────────────── */
+.about-heading {
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  font-weight: 700;
+  color: #b5895a;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.5px;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+/* ── Lead Text ─────────────────────────────────────────── */
+.about-lead {
+  font-size: 1.1rem;
+  color: #5a4633;
+  margin-bottom: 1.3rem;
+  line-height: 1.9;
+}
+
+/* ── Cards ─────────────────────────────────────────────── */
+.about-card {
+  background-color: #fff;
+  border-left: 4px solid #b5895a;
+  border-radius: 12px;
+  padding: 1.5rem 1.8rem;
+  margin-bottom: 1.4rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.about-card:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+.about-card p {
+  margin: 0;
+  line-height: 1.8;
+  font-size: clamp(1rem, 2vw, 1.1rem);
+  color: #4b3621;
+}
+
+/* ── Side Image (Refined Blend) ─────────────────────────── */
+.about-side-img {
+  width: 80%;
+  max-width: 380px;
+  display: block;
+  margin-left: auto;
+
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+
+  /* softer blend */
+  opacity: 0.92;
+  filter: brightness(0.96) contrast(1.04);
+
+  /* more subtle fade */
+  mask-image: linear-gradient(to left, rgba(0,0,0,1) 80%, rgba(0,0,0,0));
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 80%, rgba(0,0,0,0));
+
+  transition: all 0.4s ease;
+}
+
+.about-side-img:hover {
+  transform: scale(1.03);
+  opacity: 1;
+}
+
+/* ── Carousel ───────────────────────────────────────────── */
+.about-carousel {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-carousel-img {
+  height: 420px;
+  object-fit: cover;
+  filter: brightness(0.9);
+  transition: transform 0.4s ease;
+}
+
+.carousel-item:hover .about-carousel-img {
+  transform: scale(1.05);
+}
+
+/* Controls */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0,0,0,0.35);
+  border-radius: 50%;
+  padding: 14px;
+}
+
+/* ✅ Indicators (NEW - important) */
+.carousel-indicators [data-bs-target] {
+  background-color: #b5895a;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.carousel-indicators .active {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* ── Value Cards ───────────────────────────────────────── */
+.about-value-card {
+  background: #fff;
+  padding: 24px 20px;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.about-value-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 35px rgba(0,0,0,0.12);
+}
+
+.about-value-card h5 {
+  color: #b5895a;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.about-value-card p {
+  color: #5a4633;
+  font-size: 0.95rem;
+}
+
+/* ── CTA Section (UPGRADED) ────────────────────────────── */
+.about-cta {
+  margin-top: 60px;
+  padding: 40px 25px;
+  border-radius: 20px;
+
+  /* soft premium look */
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(8px);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.about-cta h3 {
+  color: #3e2c1c;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.about-cta p {
+  color: #6b4f3a;
+  margin-bottom: 20px;
+}
+
+/* CTA Button */
+.about-btn {
+  background: linear-gradient(135deg, #b5895a, #9c6f45);
+  color: #fff;
+  padding: 10px 28px;
+  border-radius: 30px;
+  border: none;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.about-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+
+/* ── Animation ─────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Mobile Optimization ───────────────────────────────── */
+@media (max-width: 768px) {
+
+  .about-heading,
+  .about-lead {
+    text-align: center;
+  }
+
+  .about-card {
+    padding: 1.2rem 1.3rem;
+  }
+
+  .about-carousel-img {
+    height: 260px;
+  }
+
+  /* hide image on mobile (good choice) */
+  .about-side-img {
+    display: none;
+  }
+
+  .about-cta {
+    padding: 30px 20px;
+  }
+}

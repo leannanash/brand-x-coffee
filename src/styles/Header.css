@@ -1,18 +1,14 @@
 
-
-/* Align brand more to the left but still with some breathing space */
-.navbar-brand {
-  margin-right: auto; /* pushes nav links and icons slightly right */
-}
 /* ===================== NAVBAR ===================== */
 .navbar {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start; /* key change */
+  gap: 1.5rem; /* space between logo and nav */
   padding: 0.75rem 2rem;
-  background-color: #1c1c1c; /* premium dark */
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); /* smoother shadow */
+  background-color: #1c1c1c;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
   font-family: 'Poppins', sans-serif;
   position: fixed;
   top: 0;
@@ -61,11 +57,13 @@
   display: flex;
   align-items: center;
   gap: 2.25rem;
-  flex-grow: 1;
-  justify-content: center;
-  transition: max-height 0.4s ease;
   flex-direction: row;
+
+  flex-grow: 0; /* IMPORTANT: remove stretching */
+  justify-content: flex-start;
+  margin-left: 0; /* keeps it close to logo */
 }
+
 .navbar-nav .nav-link {
   color: #eee;
   font-weight: 500;
