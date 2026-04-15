@@ -16,6 +16,19 @@
   transition: all 0.4s ease;
 }
 
+.navbar .container-fluid {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* everything starts left */
+}
+
+.navbar-icons {
+  margin-left: auto; /* THIS pushes it right */
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
 /* ===================== BRAND ===================== */
 .navbar-brand {
   display: flex;
@@ -194,31 +207,42 @@
   font-size: 1.6rem;
   transition: transform 0.3s ease;
 }
-.navbar-toggler:hover i {
-  transform: rotate(15deg) scale(1.1);
-}
+
+
 
 /* ===================== MOBILE RESPONSIVE ===================== */
 @media (max-width: 992px) {
-  .navbar-nav {
-    flex-direction: column;
-    gap: 0;
-    max-height: 0;
-    overflow: hidden;
-    background-color: rgba(28,28,28,0.95);
-    backdrop-filter: blur(6px);
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    transition: max-height 0.4s ease;
-  }
-  .navbar-nav.show {
-    max-height: 1200px;
-  }
+.navbar-nav {
+  flex-direction: column;
+  gap: 0;
+
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+
+  background-color: rgba(28,28,28,0.95);
+  backdrop-filter: blur(6px);
+
+  padding-bottom: 10rem;
+
+
+  /* FIX: use visibility instead of max-height glitch */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+.navbar-nav.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
   .navbar-nav .nav-link {
     width: 100%;
-    padding: 1rem;
+    padding: 0.85rem;
     border-bottom: 1px solid rgba(255,255,255,0.05);
   }
 
@@ -235,15 +259,143 @@
 @media (max-width: 576px) {
   .navbar-toggler {
     display: block;
+    transition: transform 0.35s ease;
   }
+
   .navbar-brand .brand {
-    font-size: 1.35rem;
+    font-size: 1.15rem;
   }
   .navbar-brand .logo {
-    height: 44px;
-    width: 44px;
+    height: 40px;
+    width: 40px;
   }
   .navbar-nav .nav-link {
-    font-size: 1rem;
+    font-size: 0.85rem;
   }
+
+/* ================= MOBILE ACTION AREA ================= */
+
+.navbar-icons-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0rem;
+}
+
+/* CART BUTTON */
+.mobile-cart-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+
+  padding: 0.5rem 0.5rem;
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.06);
+  color: #eee;
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  font-size: 1rem;
+  font-weight: 500;
+
+  position: relative;
+}
+
+.mobile-cart-btn i {
+  font-size: 1.1rem;
+}
+
+.mobile-cart-btn:hover {
+  background: rgba(245,192,111,0.12);
+  color: #f5c06f;
+}
+
+/* LOGIN BUTTON */
+.mobile-login-btn {
+  display: block;
+  text-align: center;
+
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+
+  background: #f5c06f;
+  color: #1c1c1c;
+
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* USER CARD */
+.mobile-user-card {
+  padding: 1rem;
+  border-radius: 14px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* top row */
+.mobile-user-top {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.mobile-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+
+  background: #f5c06f;
+  color: #1c1c1c;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 800;
+}
+
+.mobile-name {
+  font-weight: 600;
+  color: #fff;
+}
+
+.mobile-email {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+/* actions */
+.mobile-user-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-action-btn {
+  padding: 0.7rem;
+  border-radius: 10px;
+
+  text-align: center;
+  text-decoration: none;
+
+  background: rgba(255,255,255,0.05);
+  color: #ddd;
+
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-action-btn:hover {
+  background: rgba(245,192,111,0.12);
+  color: #f5c06f;
+}
+
+.mobile-action-btn.logout {
+  color: #ff6b6b;
+}
 }

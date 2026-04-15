@@ -6,9 +6,6 @@ export default function Header({ cartCount = 0, onBasketToggle, user, setUser })
   const location = useLocation();
   const navigate = useNavigate();
 
-  // -------------------------
-  // Dropdown state
-  // -------------------------
   const [menuOpen, setMenuOpen] = useState(false);
   const [desktopOpen, setDesktopOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -16,9 +13,6 @@ export default function Header({ cartCount = 0, onBasketToggle, user, setUser })
   const desktopDropdownRef = useRef(null);
   const mobileDropdownRef = useRef(null);
 
-  // -------------------------
-  // Close dropdowns on outside click
-  // -------------------------
   React.useEffect(() => {
     const handleClickOutside = (e) => {
       if (desktopDropdownRef.current && !desktopDropdownRef.current.contains(e.target)) {
@@ -28,26 +22,21 @@ export default function Header({ cartCount = 0, onBasketToggle, user, setUser })
         setMobileOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // -------------------------
-  // Logout
-  // -------------------------
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    if (setUser) setUser(null); // <-- Update parent
+    if (setUser) setUser(null);
     setDesktopOpen(false);
     setMobileOpen(false);
     navigate("/login");
   };
 
-  // -------------------------
-  // Navigation links
-  // -------------------------
   const navLinks = [
     { label: "Home", path: "/" },
     { label: "Shop", path: "/shop" },
@@ -55,25 +44,28 @@ export default function Header({ cartCount = 0, onBasketToggle, user, setUser })
     { label: "Contact", path: "/contact" },
   ];
 
-  // -------------------------
-  // Render
-  // -------------------------
   return (
     <nav className="navbar">
       <div className="container-fluid">
-        {/* Brand */}
+
+        {/* BRAND */}
         <Link className="navbar-brand" to="/">
-          <img src={logo} alt="Brand Logo" className="logo" />
+          <img src={logo} alt="logo" className="logo" />
           <span className="brand">Brand X Coffee</span>
         </Link>
 
-        {/* Mobile toggle */}
-        <button className="navbar-toggler" onClick={() => setMenuOpen(!menuOpen)}>
-          <i className="fa-solid fa-bars"></i>
+        {/* BURGER */}
+        <button
+          className={`navbar-toggler ${menuOpen ? "open" : ""}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <i className={`fa-solid ${menuOpen ? "fa-xmark" : "fa-bars"}`}></i>
         </button>
 
-        {/* Navigation links */}
+        {/* ================= MOBILE MENU ================= */}
         <div className={`navbar-nav ${menuOpen ? "show" : ""}`}>
+
+          {/* LINKS */}
           {navLinks.map(({ label, path }) => (
             <Link
               key={label}
@@ -85,57 +77,68 @@ export default function Header({ cartCount = 0, onBasketToggle, user, setUser })
             </Link>
           ))}
 
-          {/* Mobile icons */}
-          <div className="navbar-icons-mobile" ref={mobileDropdownRef}>
-            <button className="icon-btn basket-btn" onClick={onBasketToggle}>
-              <i className="fa-solid fa-bag-shopping"></i>
-              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-            </button>
+        {/* Mobile bottom actions */}
+        <div className="navbar-icons-mobile" ref={mobileDropdownRef}>
 
-            <div className="account-wrapper">
-              <button className="account-btn" onClick={() => setMobileOpen(!mobileOpen)}>
-                <i className="fa-solid fa-user"></i>
-                {user && <span className="username">{user.name}</span>}
-              </button>
+          {/* CART BUTTON (more readable on mobile) */}
+          <button className="mobile-cart-btn" onClick={onBasketToggle}>
+            <i className="fa-solid fa-bag-shopping"></i>
+            <span>Cart</span>
 
-              {mobileOpen && (
-                <div className="account-dropdown">
-                  {user ? (
-                    <>
-                      <div className="dropdown-user">
-                        <div className="avatar">{user.name?.charAt(0)}</div>
-                        <div>
-                          <strong>{user.name}</strong>
-                          <small>{user.email}</small>
-                        </div>
-                      </div>
-                      <Link
-                        to="/profile"
-                        className="dropdown-item"
-                        onClick={() => setMobileOpen(false)}
-                      >
-                        Profile
-                      </Link>
-                      <button className="dropdown-item logout" onClick={handleLogout}>
-                        Logout
-                      </button>
-                    </>
-                  ) : (
-                    <Link
-                      to="/login"
-                      className="dropdown-item"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      Login / Register
-                    </Link>
-                  )}
+            {cartCount > 0 && (
+              <span className="cart-badge">{cartCount}</span>
+            )}
+          </button>
+
+          {/* AUTH SECTION */}
+          {!user ? (
+            <Link
+              to="/login"
+              className="mobile-login-btn"
+              onClick={() => setMenuOpen(false)}
+            >
+              Sign in / Register
+            </Link>
+          ) : (
+            <div className="mobile-user-card">
+
+              <div className="mobile-user-top">
+                <div className="mobile-avatar">
+                  {user.name?.charAt(0)}
                 </div>
-              )}
+
+                <div>
+                  <div className="mobile-name">{user.name}</div>
+                  <div className="mobile-email">{user.email}</div>
+                </div>
+              </div>
+
+              <div className="mobile-user-actions">
+
+                <Link
+                  to="/profile"
+                  className="mobile-action-btn"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  View Profile
+                </Link>
+
+                <button
+                  className="mobile-action-btn logout"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+
+              </div>
             </div>
-          </div>
+          )}
+
+        </div>
+        
         </div>
 
-        {/* Desktop icons */}
+        {/* ================= DESKTOP ================= */}
         <div className="navbar-icons" ref={desktopDropdownRef}>
           <button className="icon-btn basket-btn" onClick={onBasketToggle}>
             <i className="fa-solid fa-bag-shopping"></i>
@@ -143,7 +146,10 @@ export default function Header({ cartCount = 0, onBasketToggle, user, setUser })
           </button>
 
           <div className="account-wrapper">
-            <button className="icon-btn account-btn" onClick={() => setDesktopOpen(!desktopOpen)}>
+            <button
+              className="icon-btn account-btn"
+              onClick={() => setDesktopOpen(!desktopOpen)}
+            >
               <i className="fa-solid fa-user"></i>
               {user && <span className="username">{user.name}</span>}
             </button>
@@ -159,23 +165,17 @@ export default function Header({ cartCount = 0, onBasketToggle, user, setUser })
                         <small>{user.email}</small>
                       </div>
                     </div>
-                    <Link
-                      to="/profile"
-                      className="dropdown-item"
-                      onClick={() => setDesktopOpen(false)}
-                    >
+
+                    <Link to="/profile" className="dropdown-item">
                       Profile
                     </Link>
+
                     <button className="dropdown-item logout" onClick={handleLogout}>
                       Logout
                     </button>
                   </>
                 ) : (
-                  <Link
-                    to="/login"
-                    className="dropdown-item"
-                    onClick={() => setDesktopOpen(false)}
-                  >
+                  <Link to="/login" className="dropdown-item">
                     Login / Register
                   </Link>
                 )}
@@ -183,6 +183,7 @@ export default function Header({ cartCount = 0, onBasketToggle, user, setUser })
             )}
           </div>
         </div>
+
       </div>
     </nav>
   );
