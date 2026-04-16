@@ -4,8 +4,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { AnimatePresence } from "framer-motion";
 import BasketSideBar from "../components/BasketSideBar";
-import CheckoutModal from "../components/CheckoutModal";
-import ReceiptModal from "../components/ReceiptModal";
+import CheckoutModal from "../components/Modals/CheckoutModal";
+import ReceiptModal from "../components/Modals/ReceiptModal";
 import { checkoutOrder } from "../utils/checkoutOrder";
 
 export default function MainLayout() {

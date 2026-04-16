@@ -29,9 +29,7 @@ import "./styles/AdminLayout.css";
 import "./styles/Dashboard.css"; 
 import "./styles/Shop.css"; 
 import "./styles/AboutUs.css"; 
-import "./styles/AddToBasketModal.css";
-import "./styles/CheckOutModal.css";
-import "./styles/ReceiptModal.css";
+import "./styles/Modal.css";
 import "./styles/Profile.css"; // last so it can override
 import "./styles/App.css";      // general app overrides
 

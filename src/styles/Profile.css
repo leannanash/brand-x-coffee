@@ -217,6 +217,7 @@
   transform: scale(0.95);
 }
 
+
 @media (max-width: 768px) {
   .profile-card { max-width: 90%; padding: 25px; }
   .orders-table th, .orders-table td { padding: 8px 10px; font-size: 0.85rem; }

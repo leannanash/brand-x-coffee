@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import MenuItem from "../components/MenuItem";
-import AddToBasketModal from "../components/AddToBasketModal";
+import AddToBasketModal from "../components/Modals/AddToBasketModal";
 import ScrollableBanner from "../components/reusable/ScrollableBanner";
 import { getProducts } from "../utils/products";
 import { fetchImg } from "../utils/fetchImg";

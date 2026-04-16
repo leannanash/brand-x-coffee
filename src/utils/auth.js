@@ -86,6 +86,33 @@ export function logout() {
   localStorage.removeItem("user");
 }
 
+// ======== FORGOT PASSWORD ========
+export async function forgotPassword(email) {
+  const res = await fetch(`${API_URL}/forgot-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to send reset link");
+
+  return data;
+}
+// ======== RESET PASSWORD ========
+export async function resetPassword(token, password) {
+  const res = await fetch(`${API_URL}/reset-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, password }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to reset password");
+
+  return data;
+}
+
 export function isAuthenticated() {
   return !!localStorage.getItem("accessToken");
 }
