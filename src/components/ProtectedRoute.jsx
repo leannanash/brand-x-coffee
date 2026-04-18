@@ -1,27 +1,10 @@
-import { Navigate, Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getMe } from "../utils/auth";
+import { Navigate, Outlet, useOutletContext } from "react-router-dom";
 
 export default function ProtectedRoute({ children, role }) {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const { user, authLoading } = useOutletContext();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const data = await getMe();
-        setUser(data);
-      } catch {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
-  if (loading) return <div>Loading...</div>;
+  // ✅ wait for MainLayout auth check
+  if (authLoading) return <div>Loading...</div>;
 
   // ❌ Not logged in
   if (!user) return <Navigate to="/login" replace />;
@@ -31,6 +14,6 @@ export default function ProtectedRoute({ children, role }) {
     return <Navigate to="/" replace />;
   }
 
-  // ✅ KEY FIX: support both patterns
+  // ✅ support both usage styles
   return children ? children : <Outlet />;
 }

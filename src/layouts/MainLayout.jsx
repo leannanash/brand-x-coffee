@@ -12,124 +12,140 @@ export default function MainLayout() {
   const location = useLocation();
 
   // -------------------------
-  // User state (syncs Header)
+  // Auth state
   // -------------------------
-  const [user, setUser] = useState(() => {
-    try {
-      const stored = localStorage.getItem("user");
-      return stored && stored !== "undefined" && stored !== "null" ? JSON.parse(stored) : null;
-    } catch {
-      localStorage.removeItem("user");
-      return null;
-    }
-  });
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
-  // Listen to storage changes (for multiple tabs)
+  // ✅ Restore + validate user on refresh
+ useEffect(() => {
+  const initAuth = async () => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      setUser(null);
+      setAuthLoading(false);
+      return;
+    }
+      try {
+        const userData = await getMe();
+        setUser(userData);
+      } catch {
+        setUser(null);
+      } finally {
+        setAuthLoading(false);
+      }
+    };
+
+  initAuth();
+}, []);
+
+  // Sync across tabs
   useEffect(() => {
     const handleStorage = () => {
       const stored = localStorage.getItem("user");
-      setUser(stored && stored !== "undefined" && stored !== "null" ? JSON.parse(stored) : null);
+      setUser(stored ? JSON.parse(stored) : null);
     };
     window.addEventListener("storage", handleStorage);
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   // -------------------------
-  // Basket state
+  // Basket (safe with user)
   // -------------------------
   const basketKey = user ? `basket_${user.id}` : "basket_guest";
-  const [basketItems, setBasketItems] = useState(() => {
+
+  const [basketItems, setBasketItems] = useState([]);
+
+  // Load basket AFTER auth ready
+  useEffect(() => {
+    if (authLoading) return;
+
     const saved = localStorage.getItem(basketKey);
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [basketOpen, setBasketOpen] = useState(false);
+    setBasketItems(saved ? JSON.parse(saved) : []);
+  }, [basketKey, authLoading]);
 
   useEffect(() => {
-    localStorage.setItem(basketKey, JSON.stringify(basketItems));
-  }, [basketItems, basketKey]);
+    if (!authLoading) {
+      localStorage.setItem(basketKey, JSON.stringify(basketItems));
+    }
+  }, [basketItems, basketKey, authLoading]);
+
+  const [basketOpen, setBasketOpen] = useState(false);
 
   const cartCount = basketItems.reduce((sum, item) => sum + (item.qty || 0), 0);
-
-  // -------------------------
-  // Modal states
-  // -------------------------
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [receiptOpen, setReceiptOpen] = useState(false);
-  const [lastOrder, setLastOrder] = useState(null);
-  const [loadingCheckout, setLoadingCheckout] = useState(false);
 
   // -------------------------
   // Basket functions
   // -------------------------
   const addToBasket = (item) => {
     if (!item.id) return alert("Invalid product");
+
     setBasketItems((prev) => {
-      const existing = prev.find(i => i.id === item.id && i.size === item.size);
-      if (existing) return prev.map(i => i.id === item.id && i.size === item.size ? { ...i, qty: i.qty + item.qty } : i);
+      const existing = prev.find(
+        (i) => i.id === item.id && i.size === item.size
+      );
+
+      if (existing) {
+        return prev.map((i) =>
+          i.id === item.id && i.size === item.size
+            ? { ...i, qty: i.qty + item.qty }
+            : i
+        );
+      }
+
       return [...prev, item];
     });
+
     setBasketOpen(true);
   };
 
   const handleUpdateQty = (index, newQty) => {
     if (newQty <= 0) return;
-    setBasketItems(prev => {
+    setBasketItems((prev) => {
       const copy = [...prev];
       copy[index] = { ...copy[index], qty: newQty };
       return copy;
     });
   };
 
-  const handleRemove = index => setBasketItems(prev => prev.filter((_, i) => i !== index));
-
-  const handleCheckout = () => setCheckoutOpen(true);
+  const handleRemove = (index) =>
+    setBasketItems((prev) => prev.filter((_, i) => i !== index));
 
   // -------------------------
-  // Place order
+  // Checkout
   // -------------------------
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [receiptOpen, setReceiptOpen] = useState(false);
+  const [lastOrder, setLastOrder] = useState(null);
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
+
   const handlePlaceOrder = async ({ customer_name, phone, email, address, items }) => {
     if (loadingCheckout) return;
-    if (!items || !items.length) return alert("Basket is empty!");
-    if (!customer_name || !phone) return alert("Name and phone are required!");
-
-    const safeItems = items.filter(i => i.id);
-    if (!safeItems.length) return alert("No valid items!");
 
     try {
       setLoadingCheckout(true);
-      const payload = {
-        customer_name,
-        phone,
-        email: email || null,
-        address: address || null,
-        items: safeItems.map(i => ({ product_id: i.id, size: i.size, qty: i.qty })),
-      };
-      const response = await checkoutOrder(payload);
-      const subtotal = safeItems.reduce((sum, i) => sum + i.price * i.qty, 0);
-      const tax = subtotal * 0.12;
-      const total = subtotal + tax;
 
-      setLastOrder({
-        id: response.id || response.orderId,
-        items: safeItems,
-        subtotal,
-        tax,
-        total,
-        created_at: new Date(),
+      const response = await checkoutOrder({
         customer_name,
         phone,
         email,
         address,
+        items,
+      });
+
+      setLastOrder({
+        id: response.id,
+        items,
+        created_at: new Date(),
       });
 
       setBasketItems([]);
-      setBasketOpen(false);
       setCheckoutOpen(false);
       setReceiptOpen(true);
     } catch (err) {
-      console.error("Checkout error:", err);
-      alert(err?.message || "Failed to place order");
+      console.error(err);
+      alert("Checkout failed");
     } finally {
       setLoadingCheckout(false);
     }
@@ -144,13 +160,15 @@ export default function MainLayout() {
         cartCount={cartCount}
         onBasketToggle={() => setBasketOpen(true)}
         user={user}
-        setUser={setUser} // <-- Pass down for logout
-        onLoginClick={() => setLoginOpen(true)}
+        setUser={setUser}
       />
 
       <main>
         <AnimatePresence mode="wait">
-          <Outlet key={location.pathname} context={{ addToBasket, user, setUser }} />
+          <Outlet
+            key={location.pathname}
+            context={{ user, setUser, authLoading, addToBasket }}
+          />
         </AnimatePresence>
       </main>
 
@@ -160,7 +178,7 @@ export default function MainLayout() {
         onClose={() => setBasketOpen(false)}
         onRemove={handleRemove}
         onUpdateQty={handleUpdateQty}
-        onCheckout={handleCheckout}
+        onCheckout={() => setCheckoutOpen(true)}
       />
 
       <CheckoutModal
@@ -168,7 +186,9 @@ export default function MainLayout() {
         items={basketItems}
         loading={loadingCheckout}
         onClose={() => setCheckoutOpen(false)}
-        onOrderSuccess={formData => handlePlaceOrder({ ...formData, items: basketItems })}
+        onOrderSuccess={(formData) =>
+          handlePlaceOrder({ ...formData, items: basketItems })
+        }
       />
 
       <ReceiptModal

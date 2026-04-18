@@ -1,20 +1,6 @@
 const API_URL = "http://localhost:5000/api/auth";
 
-// ======== REGISTER ========
-export async function register(name, email, password) {
-  const res = await fetch(`${API_URL}/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email, password }),
-  });
-
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || data.error || "Register failed");
-
-  return data;
-}
-
-// ======== LOGIN ========
+// ===== LOGIN =====
 export async function login(email, password) {
   const res = await fetch(`${API_URL}/login`, {
     method: "POST",
@@ -25,7 +11,7 @@ export async function login(email, password) {
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || "Login failed");
 
-  // Save access & refresh tokens
+  // ✅ store tokens + user
   localStorage.setItem("accessToken", data.accessToken);
   localStorage.setItem("refreshToken", data.refreshToken);
   localStorage.setItem("user", JSON.stringify(data.user));
@@ -33,7 +19,7 @@ export async function login(email, password) {
   return data;
 }
 
-// ======== GET CURRENT USER ========
+// ===== GET CURRENT USER =====
 export async function getMe() {
   const accessToken = localStorage.getItem("accessToken");
   if (!accessToken) throw new Error("Not authenticated");
@@ -51,13 +37,13 @@ export async function getMe() {
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || "Failed to fetch user");
 
-  // 🔥 IMPORTANT: keep user fresh
+  // ✅ IMPORTANT: return ONLY user
   localStorage.setItem("user", JSON.stringify(data.user));
 
-  return data;
+  return data.user;
 }
 
-// ======== REFRESH ACCESS TOKEN ========
+// ===== REFRESH TOKEN =====
 export async function refreshAccessToken() {
   const refreshToken = localStorage.getItem("refreshToken");
   if (!refreshToken) return false;
@@ -74,12 +60,11 @@ export async function refreshAccessToken() {
     return false;
   }
 
-  // Save new access token
   localStorage.setItem("accessToken", data.accessToken);
   return true;
 }
 
-// ======== LOGOUT ========
+// ===== LOGOUT =====
 export function logout() {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
