@@ -153,7 +153,6 @@ export async function googleLogin(token) {
 
   return data;
 }
-
 export function isAuthenticated() {
   return !!localStorage.getItem("accessToken");
 }

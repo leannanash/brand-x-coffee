@@ -9,30 +9,35 @@ export default function GoogleSignInButton({
 }) {
   const handleSuccess = async (credentialResponse) => {
     try {
-      if (!credentialResponse?.credential) {
+      const credential = credentialResponse?.credential;
+
+      if (!credential) {
         throw new Error("No Google credential returned");
       }
 
-      const token = credentialResponse.credential;
+      const data = await googleLogin(credential);
 
-      const data = await googleLogin(token);
-
-      if (onSuccess) onSuccess(data);
+      onSuccess?.(data);
     } catch (err) {
-      if (onError) onError(err);
+      onError?.(err);
     }
   };
 
-  
+  const handleError = () => {
+    onError?.(new Error("Google login failed"));
+  };
 
   return (
-    <div style={{ opacity: loading ? 0.6 : 1, pointerEvents: loading ? "none" : "auto" }}>
+    <div
+      style={{
+        opacity: loading ? 0.6 : 1,
+        pointerEvents: loading ? "none" : "auto",
+      }}
+    >
       <GoogleLogin
         onSuccess={handleSuccess}
-        onError={() => {
-          if (onError) onError(new Error("Google login failed"));
-        }}
-        useOneTap
+        onError={handleError}
+        useOneTap={false}   // 🔥 safer (avoids silent FedCM issues)
         theme="outline"
         size="large"
         shape="rectangular"

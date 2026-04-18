@@ -7,7 +7,7 @@ export default function Header({ cartCount = 0, onBasketToggle }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { user, logout } = useAuth(); // ✅ SINGLE SOURCE OF TRUTH
+  const { user, logout } = useAuth();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [desktopOpen, setDesktopOpen] = useState(false);
@@ -15,7 +15,9 @@ export default function Header({ cartCount = 0, onBasketToggle }) {
   const desktopDropdownRef = useRef(null);
   const mobileDropdownRef = useRef(null);
 
-  // close dropdown on outside click
+  // =========================
+  // CLOSE ON OUTSIDE CLICK
+  // =========================
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -37,9 +39,11 @@ export default function Header({ cartCount = 0, onBasketToggle }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // 🚪 LOGOUT (NOW CLEAN)
+  // =========================
+  // LOGOUT
+  // =========================
   const handleLogout = () => {
-    logout(); // ✅ from AuthContext
+    logout();
     setDesktopOpen(false);
     setMenuOpen(false);
     navigate("/login", { replace: true });
@@ -56,26 +60,26 @@ export default function Header({ cartCount = 0, onBasketToggle }) {
     <nav className="navbar">
       <div className="container-fluid">
 
-        {/* BRAND */}
+        {/* ================= BRAND ================= */}
         <Link className="navbar-brand" to="/">
           <img src={logo} alt="logo" className="logo" />
           <span className="brand">Brand X Coffee</span>
         </Link>
 
-        {/* BURGER */}
+        {/* ================= BURGER ================= */}
         <button
           className={`navbar-toggler ${menuOpen ? "open" : ""}`}
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => setMenuOpen((prev) => !prev)}
         >
           <i className={`fa-solid ${menuOpen ? "fa-xmark" : "fa-bars"}`}></i>
         </button>
 
-        {/* ================= MOBILE ================= */}
+        {/* ================= MOBILE MENU ================= */}
         <div className={`navbar-nav ${menuOpen ? "show" : ""}`}>
 
           {navLinks.map(({ label, path }) => (
             <Link
-              key={label}
+              key={path}
               to={path}
               className={`nav-link ${location.pathname === path ? "active" : ""}`}
               onClick={() => setMenuOpen(false)}
@@ -110,12 +114,12 @@ export default function Header({ cartCount = 0, onBasketToggle }) {
 
                 <div className="mobile-user-top">
                   <div className="mobile-avatar">
-                    {user.name?.charAt(0)}
+                    {user?.name?.charAt(0) || user?.email?.charAt(0)}
                   </div>
 
                   <div>
-                    <div className="mobile-name">{user.name}</div>
-                    <div className="mobile-email">{user.email}</div>
+                    <div className="mobile-name">{user?.name}</div>
+                    <div className="mobile-email">{user?.email}</div>
                   </div>
                 </div>
 
@@ -146,19 +150,25 @@ export default function Header({ cartCount = 0, onBasketToggle }) {
         {/* ================= DESKTOP ================= */}
         <div className="navbar-icons" ref={desktopDropdownRef}>
 
+          {/* CART */}
           <button className="icon-btn basket-btn" onClick={onBasketToggle}>
             <i className="fa-solid fa-bag-shopping"></i>
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </button>
 
+          {/* ACCOUNT */}
           <div className="account-wrapper">
 
             <button
               className="icon-btn account-btn"
-              onClick={() => setDesktopOpen(!desktopOpen)}
+              onClick={() => setDesktopOpen((prev) => !prev)}
             >
               <i className="fa-solid fa-user"></i>
-              {user && <span className="username">{user.name}</span>}
+
+              {/* safe render */}
+              {user?.name && (
+                <span className="username">{user.name}</span>
+              )}
             </button>
 
             {desktopOpen && (
@@ -168,11 +178,11 @@ export default function Header({ cartCount = 0, onBasketToggle }) {
                   <>
                     <div className="dropdown-user">
                       <div className="avatar">
-                        {user.name?.charAt(0)}
+                        {user?.name?.charAt(0) || user?.email?.charAt(0)}
                       </div>
                       <div>
-                        <strong>{user.name}</strong>
-                        <small>{user.email}</small>
+                        <strong>{user?.name}</strong>
+                        <small>{user?.email}</small>
                       </div>
                     </div>
 
