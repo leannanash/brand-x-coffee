@@ -17,9 +17,9 @@ export default function Login() {
   try {
     const result = await apiLogin(data.email, data.password);
 
-    // 🔥 Force reload so MainLayout picks up user
-    window.location.href =
-      result.user.role === "admin" ? "/admin" : "/shop";
+    navigate(result.user.role === "admin" ? "/admin" : "/shop", {
+      replace: true,
+    });
 
   } catch (err) {
     setError(err.message || "Invalid email or password.");
