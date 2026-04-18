@@ -113,6 +113,47 @@ export async function resetPassword(token, password) {
   return data;
 }
 
+// ======== UPDATE PROFILE ========
+export async function updateProfile(data) {
+  const token = localStorage.getItem("accessToken");
+
+  const res = await fetch(`${API_URL}/update-profile`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  const response = await res.json();
+  if (!res.ok) throw new Error(response.message || "Update failed");
+
+  // update stored user
+  localStorage.setItem("user", JSON.stringify(response.user));
+
+  return response;
+}
+
+// ======== GOOGLE LOGIN ========
+export async function googleLogin(token) {
+  const res = await fetch(`${API_URL}/google-login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Google login failed");
+
+  // Save tokens (same pattern as normal login)
+  localStorage.setItem("accessToken", data.accessToken);
+  localStorage.setItem("refreshToken", data.refreshToken);
+  localStorage.setItem("user", JSON.stringify(data.user));
+
+  return data;
+}
+
 export function isAuthenticated() {
   return !!localStorage.getItem("accessToken");
 }

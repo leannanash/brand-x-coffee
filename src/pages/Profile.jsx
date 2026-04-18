@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getOrders } from "../utils/orders";
 import { useOutletContext } from "react-router-dom";
+import ProfileEditModal from "../components/Modals/ProfileEditModal";
+import { updateProfile } from "../utils/auth"; // or your API
 
 export default function Profile() {
 
@@ -10,11 +12,30 @@ export default function Profile() {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [expandedOrders, setExpandedOrders] = useState({});
+  const [editOpen, setEditOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   // ✅ Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 5;
 
+
+  const handleUpdateProfile = async (data) => {
+  setSaving(true);
+  try {
+    await updateProfile(data); // backend call
+    alert("Profile updated successfully!");
+
+    // optional: refresh page or context
+    window.location.reload();
+  } catch (err) {
+    console.error(err);
+    alert("Failed to update profile");
+  } finally {
+    setSaving(false);
+    setEditOpen(false);
+  }
+};
   // -------------------------
   // Fetch user's orders
   // -------------------------
@@ -112,7 +133,7 @@ export default function Profile() {
 
         <button
           className="profile-btn"
-          onClick={() => alert("Edit profile coming soon!")}
+          onClick={() => setEditOpen(true)}
         >
           Edit Profile
         </button>
@@ -232,6 +253,14 @@ export default function Profile() {
           )}
         </div>
       </div>
+
+    <ProfileEditModal
+      open={editOpen}
+      user={user}
+      onClose={() => setEditOpen(false)}
+      onSave={handleUpdateProfile}
+      loading={saving}
+    />
     </div>
   );
 }

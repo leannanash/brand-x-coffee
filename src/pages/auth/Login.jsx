@@ -2,35 +2,35 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthMotionWrapper from "./AuthMotionWrapper";
 import LoginForm from "../../components/reusable/LoginForm";
-import { login as apiLogin } from "../../utils/auth"; 
-import { useOutletContext } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import GoogleSignInButton from "./GoogleSignInButton";
 
 export default function Login() {
-  const [loading, setLoading] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
+
   const navigate = useNavigate();
+  const { login } = useAuth();
 
- const handleLogin = async (data) => {
-  setError("");
-  setLoading(true);
+  const handleLogin = async (data) => {
+    setError("");
+    setLoginLoading(true);
 
-  try {
-    const result = await apiLogin(data.email, data.password);
+    try {
+      const user = await login(data.email, data.password);
 
-    navigate(result.user.role === "admin" ? "/admin" : "/shop", {
-      replace: true,
-    });
-
-  } catch (err) {
-    setError(err.message || "Invalid email or password.");
-  } finally {
-    setLoading(false);
-  }
-};
-
-  const handleGoogleLogin = () => {
-    alert("Google Sign-In coming soon 🚀");
+      navigate(user.role === "admin" ? "/admin" : "/shop", {
+        replace: true,
+      });
+    } catch (err) {
+      setError(err.message || "Invalid email or password.");
+    } finally {
+      setLoginLoading(false);
+    }
   };
+
+  
 
   return (
     <AuthMotionWrapper>
@@ -42,26 +42,26 @@ export default function Login() {
       {error && <div className="alert alert-danger">{error}</div>}
 
       {/* Google Sign-In */}
-      <button
-        className="btn btn-outline-dark w-100 d-flex align-items-center justify-content-center gap-2 mb-3"
-        onClick={handleGoogleLogin}
-        disabled={loading}
-      >
-        <img
-          src="https://developers.google.com/identity/images/g-logo.png"
-          alt="Google"
-          width="18"
-          height="18"
-        />
-        Continue with Google
-      </button>
+      <GoogleSignInButton
+        loading={googleLoading}
+        onSuccess={(data) => {
+          const user = data.user;
+
+          navigate(user.role === "admin" ? "/admin" : "/shop", {
+            replace: true,
+          });
+        }}
+        onError={(err) => {
+          setError(err.message || "Google login failed");
+        }}
+      />
 
       <div className="auth-divider my-3">
         <span>or</span>
       </div>
 
-      {/* Email/Password Login Form */}
-      <LoginForm onSubmit={handleLogin} loading={loading} />
+      {/* Email/Password Login */}
+      <LoginForm onSubmit={handleLogin} loading={loginLoading} />
 
       <div className="d-flex justify-content-between align-items-center mt-3">
         <Link to="/forgot-password" className="btn btn-link p-0">
