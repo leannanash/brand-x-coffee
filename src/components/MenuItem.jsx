@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/menuitem.css";
+import "../styles/MenuItem.css";
 
 export default function MenuItem({
   title,
