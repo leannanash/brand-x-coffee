@@ -1,5 +1,4 @@
-const API_URL = "https://brandx-backend-4vs6.onrender.com/auth";
-
+const API_URL = `${import.meta.env.VITE_API_URL}/api/auth`;
 // ======== REGISTER ========
 export async function register(name, email, password) {
   const res = await fetch(`${API_URL}/register`, {

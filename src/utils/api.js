@@ -1,5 +1,5 @@
 // src/utils/api.js
-const API_URL = "https://brandx-backend-4vs6.onrender.com/api";
+const API_URL = `${import.meta.env.VITE_API_URL}/api`;
 
 export async function apiFetch(endpoint, options = {}) {
   const token = localStorage.getItem("accessToken");

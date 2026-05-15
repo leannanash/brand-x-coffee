@@ -3,7 +3,7 @@ export const uploadImage = async (file) => {
   const formData = new FormData();
   formData.append("image", file);
 
-  const res = await fetch("https://brandx-backend-4vs6.onrender.com/api/uploads/product", {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/uploads/product`, {
     method: "POST",
     body: formData,
   });
