@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/auth";
+const API_URL = "https://brandx-backend-4vs6.onrender.com/auth";
 
 // ======== REGISTER ========
 export async function register(name, email, password) {
