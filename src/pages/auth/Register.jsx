@@ -11,37 +11,59 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const strength = getPasswordStrength(form.password);
 
+  // =====================
+  // HANDLE INPUT CHANGE
+  // =====================
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
+  // =====================
+  // SUBMIT REGISTER
+  // =====================
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
+    const email = form.email.trim().toLowerCase();
+
+    // validations
     if (form.password !== form.confirmPassword) {
       setError("Passwords do not match.");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      setError("Password must be at least 6 characters.");
       return;
     }
 
     setLoading(true);
 
     try {
-      // 1️⃣ Register the user
-      await apiRegister(form.name, form.email, form.password);
+      // 1️⃣ Register user
+      await apiRegister(form.name, email, form.password);
 
-      // 2️⃣ Auto-login after successful registration
-      const result = await apiLogin(form.email, form.password);
+      // 2️⃣ Auto login
+      const result = await apiLogin(email, form.password);
+
+      const user = result.user;
 
       // 3️⃣ Redirect based on role
-      if (result.user.role === "admin") navigate("/admin");
-      else navigate("/shop");
+      const target =
+        user?.role === "admin" ? "/admin" : "/shop";
+
+      navigate(target, { replace: true });
     } catch (err) {
       setError(err.message || "Registration failed. Please try again.");
     } finally {
@@ -52,46 +74,55 @@ export default function Register() {
   return (
     <AuthMotionWrapper>
       <h3 className="text-center mb-1">Create Account</h3>
-      <p className="text-center text-muted mb-4">Join Brand X Coffee ☕</p>
+      <p className="text-center text-muted mb-4">
+        Join Brand X Coffee ☕
+      </p>
 
-      {error && <div className="alert alert-danger">{error}</div>}
+      {/* ERROR */}
+      {error && (
+        <div className="alert alert-danger">{error}</div>
+      )}
 
       <form onSubmit={handleSubmit}>
+        {/* NAME */}
         <div className="mb-3">
           <input
             name="name"
             className="form-control"
             placeholder="Full Name"
-            onChange={handleChange}
             value={form.name}
+            onChange={handleChange}
             required
           />
         </div>
 
+        {/* EMAIL */}
         <div className="mb-3">
           <input
             name="email"
             type="email"
             className="form-control"
             placeholder="Email"
-            onChange={handleChange}
             value={form.email}
+            onChange={handleChange}
             required
           />
         </div>
 
+        {/* PASSWORD */}
         <div className="mb-2">
           <input
             name="password"
             type="password"
             className="form-control"
             placeholder="Password"
-            onChange={handleChange}
             value={form.password}
+            onChange={handleChange}
             required
           />
         </div>
 
+        {/* PASSWORD STRENGTH */}
         {form.password && (
           <div className="mb-3">
             <div className="progress" style={{ height: 6 }}>
@@ -106,25 +137,33 @@ export default function Register() {
           </div>
         )}
 
+        {/* CONFIRM PASSWORD */}
         <div className="mb-4">
           <input
             name="confirmPassword"
             type="password"
             className="form-control"
             placeholder="Confirm Password"
-            onChange={handleChange}
             value={form.confirmPassword}
+            onChange={handleChange}
             required
           />
         </div>
 
-        <button className="btn btn-primary w-100" disabled={loading}>
+        {/* SUBMIT BUTTON */}
+        <button
+          type="submit"
+          className="btn btn-primary w-100"
+          disabled={loading}
+        >
           {loading ? "Creating account..." : "Create Account"}
         </button>
 
+        {/* LOGIN LINK */}
         <div className="text-center mt-3">
           <small>
-            Already have an account? <Link to="/login">Login</Link>
+            Already have an account?{" "}
+            <Link to="/login">Login</Link>
           </small>
         </div>
       </form>

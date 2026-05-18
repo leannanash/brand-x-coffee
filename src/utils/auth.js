@@ -1,5 +1,8 @@
 const API_URL = `${import.meta.env.VITE_API_URL}/api/auth`;
-// ======== REGISTER ========
+
+// =====================
+// REGISTER
+// =====================
 export async function register(name, email, password) {
   const res = await fetch(`${API_URL}/register`, {
     method: "POST",
@@ -8,12 +11,14 @@ export async function register(name, email, password) {
   });
 
   const data = await res.json();
-  if (!res.ok) throw new Error(data.message || data.error || "Register failed");
+  if (!res.ok) throw new Error(data.message || "Register failed");
 
   return data;
 }
 
-// ======== LOGIN ========
+// =====================
+// LOGIN
+// =====================
 export async function login(email, password) {
   const res = await fetch(`${API_URL}/login`, {
     method: "POST",
@@ -24,39 +29,52 @@ export async function login(email, password) {
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || "Login failed");
 
-  // Save access & refresh tokens
-  localStorage.setItem("accessToken", data.accessToken);
-  localStorage.setItem("refreshToken", data.refreshToken);
-  localStorage.setItem("user", JSON.stringify(data.user));
-
+  saveSession(data);
   return data;
 }
 
-// ======== GET CURRENT USER ========
-export async function getMe() {
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) throw new Error("Not authenticated");
+// =====================
+// SAVE SESSION
+// =====================
+function saveSession(data) {
+  localStorage.setItem("accessToken", data.accessToken);
+  localStorage.setItem("refreshToken", data.refreshToken);
+  localStorage.setItem("user", JSON.stringify(data.user));
+}
 
-  const res = await fetch(`${API_URL}/me`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
+// =====================
+// GET CURRENT USER (SAFE REFRESH)
+// =====================
+export async function getMe() {
+  let token = localStorage.getItem("accessToken");
+  if (!token) throw new Error("Not authenticated");
+
+  let res = await fetch(`${API_URL}/me`, {
+    headers: { Authorization: `Bearer ${token}` },
   });
 
+  // if token expired → try refresh once
   if (res.status === 401) {
-    const success = await refreshAccessToken();
-    if (!success) throw new Error("Not authenticated");
-    return getMe();
+    const refreshed = await refreshAccessToken();
+    if (!refreshed) throw new Error("Session expired");
+
+    token = localStorage.getItem("accessToken");
+
+    res = await fetch(`${API_URL}/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   }
 
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || "Failed to fetch user");
 
-  // 🔥 IMPORTANT: keep user fresh
-  localStorage.setItem("user", JSON.stringify(data.user));
-
+  localStorage.setItem("user", JSON.stringify(data));
   return data;
 }
 
-// ======== REFRESH ACCESS TOKEN ========
+// =====================
+// REFRESH TOKEN
+// =====================
 export async function refreshAccessToken() {
   const refreshToken = localStorage.getItem("refreshToken");
   if (!refreshToken) return false;
@@ -68,24 +86,41 @@ export async function refreshAccessToken() {
   });
 
   const data = await res.json();
+
   if (!res.ok) {
     logout();
     return false;
   }
 
-  // Save new access token
   localStorage.setItem("accessToken", data.accessToken);
   return true;
 }
 
-// ======== LOGOUT ========
-export function logout() {
+// =====================
+// LOGOUT (SYNC WITH BACKEND)
+// =====================
+export async function logout() {
+  const token = localStorage.getItem("accessToken");
+
+  try {
+    await fetch(`${API_URL}/logout`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (err) {
+    console.log("Logout request failed (ignored)");
+  }
+
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("user");
 }
 
-// ======== FORGOT PASSWORD ========
+// =====================
+// FORGOT PASSWORD
+// =====================
 export async function forgotPassword(email) {
   const res = await fetch(`${API_URL}/forgot-password`, {
     method: "POST",
@@ -98,7 +133,10 @@ export async function forgotPassword(email) {
 
   return data;
 }
-// ======== RESET PASSWORD ========
+
+// =====================
+// RESET PASSWORD
+// =====================
 export async function resetPassword(token, password) {
   const res = await fetch(`${API_URL}/reset-password`, {
     method: "POST",
@@ -112,29 +150,47 @@ export async function resetPassword(token, password) {
   return data;
 }
 
-// ======== UPDATE PROFILE ========
-export async function updateProfile(data) {
-  const token = localStorage.getItem("accessToken");
+// =====================
+// UPDATE PROFILE (SAFE REFRESH)
+// =====================
+export async function updateProfile(payload) {
+  let token = localStorage.getItem("accessToken");
 
-  const res = await fetch(`${API_URL}/update-profile`, {
+  let res = await fetch(`${API_URL}/update-profile`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(payload),
   });
 
-  const response = await res.json();
-  if (!res.ok) throw new Error(response.message || "Update failed");
+  if (res.status === 401) {
+    const refreshed = await refreshAccessToken();
+    if (!refreshed) throw new Error("Session expired");
 
-  // update stored user
-  localStorage.setItem("user", JSON.stringify(response.user));
+    token = localStorage.getItem("accessToken");
 
-  return response;
+    res = await fetch(`${API_URL}/update-profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+  }
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Update failed");
+
+  localStorage.setItem("user", JSON.stringify(data.user));
+  return data;
 }
 
-// ======== GOOGLE LOGIN ========
+// =====================
+// GOOGLE LOGIN
+// =====================
 export async function googleLogin(token) {
   const res = await fetch(`${API_URL}/google-login`, {
     method: "POST",
@@ -145,13 +201,24 @@ export async function googleLogin(token) {
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || "Google login failed");
 
-  // Save tokens (same pattern as normal login)
-  localStorage.setItem("accessToken", data.accessToken);
-  localStorage.setItem("refreshToken", data.refreshToken);
-  localStorage.setItem("user", JSON.stringify(data.user));
-
+  saveSession(data);
   return data;
 }
+
+// =====================
+// AUTH CHECK
+// =====================
 export function isAuthenticated() {
   return !!localStorage.getItem("accessToken");
+}
+
+// =====================
+// GET USER FROM STORAGE
+// =====================
+export function getStoredUser() {
+  try {
+    return JSON.parse(localStorage.getItem("user"));
+  } catch {
+    return null;
+  }
 }

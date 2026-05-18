@@ -13,6 +13,9 @@ export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  // =====================
+  // EMAIL LOGIN
+  // =====================
   const handleLogin = async (data) => {
     setError("");
     setLoginLoading(true);
@@ -20,9 +23,10 @@ export default function Login() {
     try {
       const user = await login(data.email, data.password);
 
-      navigate(user.role === "admin" ? "/admin" : "/shop", {
-        replace: true,
-      });
+      const target =
+        user?.role === "admin" ? "/admin" : "/shop";
+
+      navigate(target, { replace: true });
     } catch (err) {
       setError(err.message || "Invalid email or password.");
     } finally {
@@ -30,7 +34,31 @@ export default function Login() {
     }
   };
 
-  
+  // =====================
+  // GOOGLE LOGIN
+  // =====================
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setError("");
+    setGoogleLoading(true);
+
+    try {
+      const token = credentialResponse.credential;
+
+      // IMPORTANT: your AuthContext must expose this
+      const data = await login.google(token);
+
+      const user = data.user;
+
+      const target =
+        user?.role === "admin" ? "/admin" : "/shop";
+
+      navigate(target, { replace: true });
+    } catch (err) {
+      setError(err.message || "Google login failed");
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
 
   return (
     <AuthMotionWrapper>
@@ -39,18 +67,13 @@ export default function Login() {
         Login to Brand X Coffee ☕
       </p>
 
+      {/* ERROR MESSAGE */}
       {error && <div className="alert alert-danger">{error}</div>}
 
-      {/* Google Sign-In */}
+      {/* GOOGLE LOGIN */}
       <GoogleSignInButton
         loading={googleLoading}
-        onSuccess={(data) => {
-          const user = data.user;
-
-          navigate(user.role === "admin" ? "/admin" : "/shop", {
-            replace: true,
-          });
-        }}
+        onSuccess={handleGoogleSuccess}
         onError={(err) => {
           setError(err.message || "Google login failed");
         }}
@@ -60,9 +83,10 @@ export default function Login() {
         <span>or</span>
       </div>
 
-      {/* Email/Password Login */}
+      {/* EMAIL LOGIN */}
       <LoginForm onSubmit={handleLogin} loading={loginLoading} />
 
+      {/* LINKS */}
       <div className="d-flex justify-content-between align-items-center mt-3">
         <Link to="/forgot-password" className="btn btn-link p-0">
           Forgot password?
