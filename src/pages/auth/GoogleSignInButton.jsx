@@ -1,26 +1,20 @@
 import React from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import { googleLogin } from "../../utils/auth";
 
 export default function GoogleSignInButton({
   onSuccess,
   onError,
   loading = false,
 }) {
-  const handleSuccess = async (credentialResponse) => {
-    try {
-      const credential = credentialResponse?.credential;
+  const handleSuccess = (credentialResponse) => {
+    const credential = credentialResponse?.credential;
 
-      if (!credential) {
-        throw new Error("No Google credential returned");
-      }
-
-      const data = await googleLogin(credential);
-
-      onSuccess?.(data);
-    } catch (err) {
-      onError?.(err);
+    if (!credential) {
+      onError?.(new Error("No Google credential returned"));
+      return;
     }
+
+    onSuccess?.(credential);
   };
 
   const handleError = () => {
@@ -37,7 +31,7 @@ export default function GoogleSignInButton({
       <GoogleLogin
         onSuccess={handleSuccess}
         onError={handleError}
-        useOneTap={false}   // 🔥 safer (avoids silent FedCM issues)
+        useOneTap={false}
         theme="outline"
         size="large"
         shape="rectangular"

@@ -37,28 +37,13 @@ export default function Login() {
   // =====================
   // GOOGLE LOGIN
   // =====================
-  const handleGoogleSuccess = async (credentialResponse) => {
-    setError("");
-    setGoogleLoading(true);
-
-    try {
-      const token = credentialResponse.credential;
-
-      // IMPORTANT: your AuthContext must expose this
-      const data = await login.google(token);
-
-      const user = data.user;
-
-      const target =
-        user?.role === "admin" ? "/admin" : "/shop";
-
-      navigate(target, { replace: true });
-    } catch (err) {
-      setError(err.message || "Google login failed");
-    } finally {
-      setGoogleLoading(false);
-    }
-  };
+<GoogleSignInButton
+  loading={googleLoading}
+  onSuccess={handleGoogleSuccess}
+  onError={(err) => {
+    setError(err.message || "Google login failed");
+  }}
+/>
 
   return (
     <AuthMotionWrapper>
